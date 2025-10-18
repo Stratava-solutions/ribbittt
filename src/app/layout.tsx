@@ -11,6 +11,9 @@ export const metadata = {
   description: "Shop the latest kids fashion",
 };
 
+// Toggle this to show/hide coming soon page
+const IS_UNDER_DEVELOPMENT = true;
+
 export default function RootLayout({
   children,
 }: {
@@ -19,9 +22,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Header />
-        <main className="min-h-screen">{children}</main>
-        <Footer />
+        {IS_UNDER_DEVELOPMENT ? (
+          <main className="min-h-screen">{children}</main>
+        ) : (
+          <>
+            <Header />
+            <main className="min-h-screen">{children}</main>
+            <Footer />
+          </>
+        )}
       </body>
     </html>
   );

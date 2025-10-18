@@ -1,7 +1,14 @@
 // FILE: src/app/page.tsx
-import Link from "next/link";
+import {ComingSoon} from "../components/comingSoon";
+
+// Toggle this to show/hide coming soon page
+const IS_UNDER_DEVELOPMENT = true;
 
 export default function Home() {
+  if (IS_UNDER_DEVELOPMENT) {
+    return <ComingSoon />;
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
       {/* Hero Section */}
@@ -10,12 +17,12 @@ export default function Home() {
         <p className="text-xl mb-8 text-gray-700">
           Stylish & Comfortable Clothing for Your Little Ones
         </p>
-        <Link
+        <a
           href="/shop"
-          className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition"
+          className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition inline-block"
         >
           Shop Now
-        </Link>
+        </a>
       </section>
 
       {/* Categories Section */}
@@ -25,11 +32,11 @@ export default function Home() {
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {["Dresses", "Tops", "Bottoms", "Outerwear"].map((cat) => (
-            <Link key={cat} href={`/shop?category=${cat.toLowerCase()}`}>
+            <a key={cat} href={`/shop?category=${cat.toLowerCase()}`}>
               <div className="p-8 bg-gray-100 rounded-lg hover:bg-gray-200 transition text-center">
                 <h3 className="font-semibold text-lg">{cat}</h3>
               </div>
-            </Link>
+            </a>
           ))}
         </div>
       </section>
