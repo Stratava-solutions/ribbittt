@@ -1,7 +1,8 @@
 // FILE: src/app/layout.tsx
-import "./globals.css";
+import "../globals.css";
 import { Inter } from "next/font/google";
-import { ToastContainer } from "react-toastify";
+import { Header } from "../../components/header";
+import { Footer } from "../../components/footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,13 +22,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ToastContainer position="top-center" />
-
         {IS_UNDER_DEVELOPMENT ? (
           <main className="min-h-screen">{children}</main>
         ) : (
           <>
+            <Header />
             <main className="min-h-screen">{children}</main>
+            <Footer />
           </>
         )}
       </body>

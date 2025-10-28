@@ -1,8 +1,8 @@
 // FILE: src/app/page.tsx
-import {ComingSoon} from "../components/comingSoon";
+import {ComingSoon} from "../../../components/comingSoon";
 
 // Toggle this to show/hide coming soon page
-const IS_UNDER_DEVELOPMENT = true;
+const IS_UNDER_DEVELOPMENT = false;
 
 export default function Home() {
   if (IS_UNDER_DEVELOPMENT) {

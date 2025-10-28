@@ -23,10 +23,10 @@ export function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link href="/" className="hover:text-blue-600 transition">Home</Link>
-            <Link href="/shop" className="hover:text-blue-600 transition">Shop</Link>
-            <Link href="/about" className="hover:text-blue-600 transition">About</Link>
-            <Link href="/contact" className="hover:text-blue-600 transition">Contact</Link>
+            <Link href="/service/home" className="hover:text-blue-600 transition">Home</Link>
+            <Link href="/service/shop" className="hover:text-blue-600 transition">Shop</Link>
+            <Link href="/service/about" className="hover:text-blue-600 transition">About</Link>
+            <Link href="/service/contact" className="hover:text-blue-600 transition">Contact</Link>
           </nav>
 
           {/* Icons */}
