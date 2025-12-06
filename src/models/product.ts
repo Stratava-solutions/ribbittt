@@ -1,6 +1,9 @@
-// src/models/Product.ts
 import mongoose, { Schema, Document } from 'mongoose';
 
+
+/**
+ * src/models/Product.ts
+ */
 export interface IProduct extends Document {
   name: string;
   price: number;
