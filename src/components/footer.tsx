@@ -1,62 +1,104 @@
 // FILE: src/components/Footer.tsx
-import Link from 'next/link'
+import Link from "next/link";
+import { Facebook, Instagram, Twitter, Mail, Phone, MapPin } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="bg-gray-900 text-white mt-16">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Company Info */}
+    <footer className="bg-gray-950 text-gray-300 mt-20 pt-16 pb-10">
+      <div className="max-w-7xl mx-auto px-6">
+        
+        {/* TOP GRID */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+          
+          {/* BRAND */}
           <div>
-            <h3 className="text-xl font-bold mb-4">KidsFashion</h3>
-            <p className="text-gray-400">
-              Quality clothing for kids that parents trust and children love.
+            <h3 className="text-2xl font-extrabold text-white mb-4 tracking-wide">
+              KidsFashion
+            </h3>
+            <p className="text-gray-400 leading-relaxed">
+              Premium kids clothing crafted with comfort, love, and style.
+              Designed for everyday smiles.
             </p>
+
+            {/* Social Icons */}
+            <div className="flex gap-4 mt-6">
+              <a className="p-2 rounded-full bg-gray-800 hover:bg-blue-600 transition">
+                <Facebook size={18} />
+              </a>
+              <a className="p-2 rounded-full bg-gray-800 hover:bg-pink-600 transition">
+                <Instagram size={18} />
+              </a>
+              <a className="p-2 rounded-full bg-gray-800 hover:bg-sky-500 transition">
+                <Twitter size={18} />
+              </a>
+            </div>
           </div>
 
-          {/* Quick Links */}
+          {/* QUICK LINKS */}
           <div>
-            <h4 className="font-semibold mb-4">Quick Links</h4>
-            <ul className="space-y-2">
-              <li><Link href="/shop" className="text-gray-400 hover:text-white transition">Shop</Link></li>
-              <li><Link href="/about" className="text-gray-400 hover:text-white transition">About Us</Link></li>
-              <li><Link href="/contact" className="text-gray-400 hover:text-white transition">Contact</Link></li>
-              <li><Link href="/account/orders" className="text-gray-400 hover:text-white transition">My Orders</Link></li>
+            <h4 className="text-lg font-semibold text-white mb-4">Quick Links</h4>
+            <ul className="space-y-3">
+              <li><Link href="/shop" className="hover:text-white transition">Shop</Link></li>
+              <li><Link href="/about" className="hover:text-white transition">About Us</Link></li>
+              <li><Link href="/contact" className="hover:text-white transition">Contact</Link></li>
+              <li><Link href="/account/orders" className="hover:text-white transition">My Orders</Link></li>
             </ul>
           </div>
 
-          {/* Customer Service */}
+          {/* CUSTOMER SERVICE */}
           <div>
-            <h4 className="font-semibold mb-4">Customer Service</h4>
-            <ul className="space-y-2">
-              <li><Link href="#" className="text-gray-400 hover:text-white transition">Shipping Info</Link></li>
-              <li><Link href="#" className="text-gray-400 hover:text-white transition">Returns</Link></li>
-              <li><Link href="#" className="text-gray-400 hover:text-white transition">Size Guide</Link></li>
-              <li><Link href="#" className="text-gray-400 hover:text-white transition">FAQ</Link></li>
+            <h4 className="text-lg font-semibold text-white mb-4">Customer Service</h4>
+            <ul className="space-y-3">
+              <li><Link className="hover:text-white transition" href="#">Shipping Info</Link></li>
+              <li><Link className="hover:text-white transition" href="#">Returns</Link></li>
+              <li><Link className="hover:text-white transition" href="#">Size Guide</Link></li>
+              <li><Link className="hover:text-white transition" href="#">FAQ</Link></li>
             </ul>
           </div>
 
-          {/* Newsletter */}
+          {/* NEWSLETTER */}
           <div>
-            <h4 className="font-semibold mb-4">Newsletter</h4>
-            <p className="text-gray-400 mb-4">Subscribe for exclusive offers!</p>
-            <form className="flex">
-              <input 
-                type="email" 
-                placeholder="Your email" 
-                className="flex-1 px-4 py-2 rounded-l text-gray-900"
+            <h4 className="text-lg font-semibold text-white mb-4">Stay Updated</h4>
+            <p className="text-gray-400 mb-4">
+              Join our newsletter for new arrivals, offers & updates.
+            </p>
+
+            <form className="flex items-center bg-gray-800 rounded-full overflow-hidden">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="flex-1 px-4 py-3 bg-transparent outline-none text-gray-200"
               />
-              <button className="bg-blue-600 px-4 py-2 rounded-r hover:bg-blue-700 transition">
-                Join
+              <button
+                type="submit"
+                className="bg-blue-600 px-6 py-3 text-sm font-semibold hover:bg-blue-700 transition"
+              >
+                Subscribe
               </button>
             </form>
+
+            {/* Contact Info */}
+            <div className="mt-6 space-y-3 text-sm">
+              <div className="flex items-center gap-3">
+                <Mail size={16} /> support@kidsfashion.com
+              </div>
+              <div className="flex items-center gap-3">
+                <Phone size={16} /> +91 98765 43210
+              </div>
+              <div className="flex items-center gap-3">
+                <MapPin size={16} /> Bengaluru, India
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-          <p>&copy; 2024 KidsFashion. All rights reserved.</p>
+        {/* COPYRIGHT */}
+        <div className="border-t border-gray-800 mt-12 pt-6 text-center">
+          <p className="text-gray-500 text-sm">
+            © {new Date().getFullYear()} KidsFashion. Crafted with ❤️ for kids everywhere.
+          </p>
         </div>
       </div>
     </footer>
-  )
+  );
 }
