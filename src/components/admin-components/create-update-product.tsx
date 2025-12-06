@@ -253,7 +253,7 @@ export function CreateUpdateProduct({ isOpen, onClose, onSuccess, editProduct }:
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Price ($) *
+                  Price (₹) *
                 </label>
                 <input
                   {...register('price', { valueAsNumber: true })}

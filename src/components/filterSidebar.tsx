@@ -25,9 +25,9 @@ export function FilterSidebar({ filters, setFilters, products }: FilterSidebarPr
   const categories = ['all', 'dresses', 'tops', 'bottoms', 'outerwear', 'sets']
   const priceRanges = [
     { value: 'all', label: 'All Prices' },
-    { value: 'under25', label: 'Under $25' },
-    { value: '25to35', label: '$25 - $35' },
-    { value: 'over35', label: 'Over $35' }
+    { value: 'under250', label: 'Under ₹250' },
+    { value: '250to350', label: '₹250 - ₹350' },
+    { value: 'over350', label: 'Over ₹350' }
   ]
 
   // Extract unique colors and sizes from products

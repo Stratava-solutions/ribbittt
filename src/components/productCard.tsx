@@ -108,7 +108,7 @@ export function ProductCard({ product }: { product: Product }) {
 
         <div className="flex items-center justify-between mb-3">
           <span className="text-2xl font-bold text-blue-600">
-            ${product.price.toFixed(2)}
+            ₹{product.price.toFixed(2)}
           </span>
           <span className="text-sm text-gray-500">
             {product.stock} in stock

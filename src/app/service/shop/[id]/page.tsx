@@ -257,7 +257,7 @@ export default function ProductDetailPage() {
 
               <div className="flex items-baseline gap-3 mb-6">
                 <span className="text-4xl font-bold text-blue-600">
-                  ${product.price.toFixed(2)}
+                  ₹{product.price.toFixed(2)}
                 </span>
                 {product.stock > 0 && (
                   <span className="text-green-600 text-sm font-medium">
@@ -372,7 +372,7 @@ export default function ProductDetailPage() {
                   </div>
                   <div>
                     <p className="font-medium text-gray-900">Free Shipping</p>
-                    <p className="text-gray-600 text-xs">On orders over $50</p>
+                    <p className="text-gray-600 text-xs">On orders over ₹500</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 text-sm">

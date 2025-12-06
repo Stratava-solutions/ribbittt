@@ -2,11 +2,11 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { toast } from 'react-hot-toast';
-import { Pencil, Trash2, Plus, Eye } from 'lucide-react';
-import Image from 'next/image';
-import { CreateUpdateProduct } from '@/components/admin-components/create-update-product';
-import { ProductPreviewModal } from '@/components/admin-components/product-preview'
+import { toast } from "react-hot-toast";
+import { Pencil, Trash2, Plus, Eye } from "lucide-react";
+import Image from "next/image";
+import { CreateUpdateProduct } from "@/components/admin-components/create-update-product";
+import { ProductPreviewModal } from "@/components/admin-components/product-preview";
 
 interface Product {
   _id: string;
@@ -33,30 +33,30 @@ export default function AdminDashboardPage() {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch('/api/products');
+      const response = await fetch("/api/products");
       const data = await response.json();
-      
+
       if (data.success) {
         setProducts(data.data);
       } else {
-        toast.error('Failed to load products');
+        toast.error("Failed to load products");
       }
     } catch (error) {
-      console.error('Fetch error:', error);
-      toast.error('Failed to load products');
+      console.error("Fetch error:", error);
+      toast.error("Failed to load products");
     } finally {
       setLoading(false);
     }
   };
 
   const markAsSold = async (id: string) => {
-    const product = products.find(p => p._id === id);
+    const product = products.find((p) => p._id === id);
     if (!product || product.stock === 0) return;
 
     try {
       const response = await fetch(`/api/products/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           stock: product.stock - 1,
           sold: product.sold + 1,
@@ -66,14 +66,14 @@ export default function AdminDashboardPage() {
       const data = await response.json();
 
       if (data.success) {
-        toast.success('Product sold!');
+        toast.success("Product sold!");
         fetchProducts();
       } else {
-        toast.error('Failed to update product');
+        toast.error("Failed to update product");
       }
     } catch (error) {
-      console.error('Update error:', error);
-      toast.error('Failed to update product');
+      console.error("Update error:", error);
+      toast.error("Failed to update product");
     }
   };
 
@@ -93,24 +93,24 @@ export default function AdminDashboardPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this product?')) return;
+    if (!confirm("Are you sure you want to delete this product?")) return;
 
     try {
       const response = await fetch(`/api/products/${id}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
 
       const data = await response.json();
 
       if (data.success) {
-        toast.success('Product deleted successfully');
+        toast.success("Product deleted successfully");
         fetchProducts();
       } else {
-        toast.error(data.error || 'Failed to delete product');
+        toast.error(data.error || "Failed to delete product");
       }
     } catch (error) {
-      console.error('Delete error:', error);
-      toast.error('Failed to delete product');
+      console.error("Delete error:", error);
+      toast.error("Failed to delete product");
     }
   };
 
@@ -130,9 +130,7 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
-      <h1 className="text-3xl font-bold text-blue-700 mb-8">
-        Admin Dashboard
-      </h1>
+      <h1 className="text-3xl font-bold text-blue-700 mb-8">Admin Dashboard</h1>
 
       {/* PRODUCT MANAGEMENT */}
       <section className="bg-white p-6 rounded-2xl shadow-lg">
@@ -187,7 +185,10 @@ export default function AdminDashboardPage() {
                         {product.images?.[0] && (
                           <div className="relative w-10 h-10 flex-shrink-0">
                             <Image
-                              src={product.images[0].thumbnailUrl || product.images[0].url}
+                              src={
+                                product.images[0].thumbnailUrl ||
+                                product.images[0].url
+                              }
                               alt={product.name}
                               fill
                               className="object-cover rounded"
@@ -196,21 +197,23 @@ export default function AdminDashboardPage() {
                         )}
                         <div>
                           <p className="font-medium">{product.name}</p>
-                          <p className="text-xs text-gray-500 capitalize">{product.category}</p>
+                          <p className="text-xs text-gray-500 capitalize">
+                            {product.category}
+                          </p>
                         </div>
                       </div>
                     </td>
                     <td className="p-3 text-gray-600">
-                      ${product.price.toFixed(2)}
+                      ₹{product.price.toFixed(2)}
                     </td>
                     <td className="p-3">
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-medium ${
                           product.stock > 10
-                            ? 'bg-green-100 text-green-700'
+                            ? "bg-green-100 text-green-700"
                             : product.stock > 0
-                            ? 'bg-yellow-100 text-yellow-700'
-                            : 'bg-red-100 text-red-700'
+                            ? "bg-yellow-100 text-yellow-700"
+                            : "bg-red-100 text-red-700"
                         }`}
                       >
                         {product.stock}

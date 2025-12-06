@@ -131,7 +131,7 @@ export default function About() {
                 <div>
                   <h3 className="text-xl font-bold mb-2">Fast, Free Shipping</h3>
                   <p className="text-gray-700">
-                    Orders over $50 ship free! Most orders arrive within 3-5 business days, so your kids can start 
+                    Orders over ₹500 ship free! Most orders arrive within 3-5 business days, so your kids can start 
                     enjoying their new clothes quickly.
                   </p>
                 </div>

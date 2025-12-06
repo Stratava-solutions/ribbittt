@@ -12,7 +12,7 @@ export function Header() {
       <div className="container mx-auto px-4">
         {/* Top Bar */}
         <div className="py-2 text-sm text-gray-600 text-center border-b">
-          Free shipping on orders over $50 | Easy 30-day returns
+          Free shipping on orders over ₹500 | Easy 30-day returns
         </div>
 
         {/* Main Header */}
