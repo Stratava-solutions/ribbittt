@@ -18,7 +18,7 @@ export function Header() {
         {/* Main Header */}
         <div className="py-4 flex items-center justify-between">
           <Link href="/" className="text-2xl font-bold text-blue-600">
-            KidsFashion
+            Ribbitte
           </Link>
 
           {/* Desktop Navigation */}

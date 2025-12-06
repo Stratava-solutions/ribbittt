@@ -8,7 +8,7 @@ const menuItems = [
   { name: 'Dashboard', href: '/admin/main/dashboard', icon: LayoutDashboard },
   { name: 'Products', href: '/admin/main/products', icon: Package },
   { name: 'Contact', href: '/admin/main/contact', icon: Mail },
-  { name: 'Settings', href: '/admin/main/settings', icon: Settings },
+//   { name: 'Settings', href: '/admin/main/settings', icon: Settings },
 ]
 
 export default function Sidebar() {
