@@ -22,7 +22,7 @@ interface Product {
   createdAt: string
 }
 
-const ADMIN_WHATSAPP_NUMBER = '919876543210' // replace with admin's number
+const ADMIN_WHATSAPP_NUMBER = process.env.NEXT_APP_ADMIN_WHATSAPP_NUMBER || ""
 
 export default function ProductDetailPage() {
   const params:any = useParams()

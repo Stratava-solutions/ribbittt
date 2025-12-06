@@ -429,7 +429,7 @@ function CollectionCard({
 export function ProductCard({ product }: { product: Product }) {
   const img = product.images?.[0]?.url || "/placeholder.png";
 
-    const ADMIN_WHATSAPP_NUMBER = '919876543210'
+    const ADMIN_WHATSAPP_NUMBER = process.env.NEXT_APP_ADMIN_WHATSAPP_NUMBER || ""
 
 
   const handleWhatsApp = () => {

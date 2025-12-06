@@ -18,7 +18,7 @@ interface Product {
   featured: boolean;
 }
 
-const ADMIN_WHATSAPP_NUMBER = "919876543210"; // replace with admin number in international format
+const ADMIN_WHATSAPP_NUMBER = process.env.NEXT_APP_ADMIN_WHATSAPP_NUMBER || ""
 
 export function ProductCard({
   product,
