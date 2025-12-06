@@ -46,6 +46,7 @@ export function CreateUpdateProduct({ isOpen, onClose, onSuccess, editProduct }:
     watch,
     reset,
   } = useForm<ProductFormData>({
+    // @ts-ignore
     resolver: zodResolver(productSchema),
     defaultValues: {
       name: '',
