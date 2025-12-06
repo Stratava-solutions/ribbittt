@@ -130,7 +130,7 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
-      <h1 className="text-3xl font-bold text-blue-700 mb-8">Admin Dashboard</h1>
+      <h1 className="text-3xl font-bold text-black mb-8">Products</h1>
 
       {/* PRODUCT MANAGEMENT */}
       <section className="bg-white p-6 rounded-2xl shadow-lg">

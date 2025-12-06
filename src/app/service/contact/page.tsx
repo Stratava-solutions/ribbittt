@@ -1,4 +1,3 @@
-// app/contact/page.tsx
 'use client'
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -46,7 +45,8 @@ export default function ContactPage() {
 
   return (
     <div className="bg-gray-50">
-      <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-20">
+      {/* Header Section */}
+      <section className="bg-gradient-to-r from-green-600 to-green-400 text-white py-20">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-5xl font-bold mb-4">Get in Touch</h1>
           <p className="text-xl max-w-2xl mx-auto">
@@ -55,50 +55,52 @@ export default function ContactPage() {
         </div>
       </section>
 
+      {/* Main Contact Section */}
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-3 gap-12 max-w-6xl mx-auto">
+            
+            {/* Contact Form */}
             <div className="lg:col-span-2">
-              <div className="bg-white p-8 rounded-lg shadow-lg">
-                <h2 className="text-3xl font-bold mb-6">Send Us a Message</h2>
-
+              <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
+                <h2 className="text-3xl font-bold mb-6 text-gray-900">Send Us a Message</h2>
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block mb-2 font-semibold text-gray-700">
-                        Full Name <span className="text-red-500">*</span>
+                      <label className="block mb-2 font-semibold text-gray-900">
+                        Full Name <span className="text-green-600">*</span>
                       </label>
                       <input {...register('name')}
                         placeholder="John Doe"
-                        className={`w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.name ? 'border-red-500' : 'border-gray-300'}`}
+                        className={`w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-400 border-gray-900 ${errors.name ? 'border-red-500' : ''}`}
                       />
                       {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
                     </div>
                     <div>
-                      <label className="block mb-2 font-semibold text-gray-700">
-                        Email Address <span className="text-red-500">*</span>
+                      <label className="block mb-2 font-semibold text-gray-900">
+                        Email Address <span className="text-green-600">*</span>
                       </label>
                       <input {...register('email')}
                         placeholder="john@example.com"
-                        className={`w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
+                        className={`w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-400 border-gray-900 ${errors.email ? 'border-red-500' : ''}`}
                       />
                       {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
                     </div>
                   </div>
 
                   <div>
-                    <label className="block mb-2 font-semibold text-gray-700">Phone Number (Optional)</label>
+                    <label className="block mb-2 font-semibold text-gray-900">Phone Number (Optional)</label>
                     <input {...register('phone')}
                       placeholder="+1 (555) 123-4567"
-                      className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                      className="w-full border border-gray-900 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-400" />
                   </div>
 
                   <div>
-                    <label className="block mb-2 font-semibold text-gray-700">
-                      Subject <span className="text-red-500">*</span>
+                    <label className="block mb-2 font-semibold text-gray-900">
+                      Subject <span className="text-green-600">*</span>
                     </label>
                     <select {...register('subject')}
-                      className={`w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.subject ? 'border-red-500' : 'border-gray-300'}`}>
+                      className={`w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-400 border-gray-900 ${errors.subject ? 'border-red-500' : ''}`}>
                       <option value="">Select a subject</option>
                       <option value="general">General Inquiry</option>
                       <option value="order">Order Status</option>
@@ -112,16 +114,16 @@ export default function ContactPage() {
                   </div>
 
                   <div>
-                    <label className="block mb-2 font-semibold text-gray-700">
-                      Message <span className="text-red-500">*</span>
+                    <label className="block mb-2 font-semibold text-gray-900">
+                      Message <span className="text-green-600">*</span>
                     </label>
                     <textarea {...register('message')} rows={6} placeholder="Tell us how we can help you..."
-                      className={`w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none ${errors.message ? 'border-red-500' : 'border-gray-300'}`}></textarea>
+                      className={`w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-400 border-gray-900 resize-none ${errors.message ? 'border-red-500' : ''}`}></textarea>
                     {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>}
                   </div>
 
                   <button type="submit" disabled={isSubmitting}
-                    className="w-full bg-blue-600 text-white py-4 rounded-lg hover:bg-blue-700 transition font-semibold text-lg flex items-center justify-center gap-2">
+                    className="w-full bg-gradient-to-r from-green-500 to-green-400 text-white py-4 rounded-xl hover:scale-[1.02] transform transition font-semibold text-lg flex items-center justify-center gap-2 shadow-md">
                     <Send size={20} />
                     {isSubmitting ? 'Sending...' : 'Send Message'}
                   </button>
@@ -129,74 +131,46 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* Contact Information - unchanged */}
+            {/* Contact Info / Quick Links */}
             <div className="space-y-6">
-              <div className="bg-white p-6 rounded-lg shadow-lg">
+              <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
                 <h3 className="text-2xl font-bold mb-6">Contact Information</h3>
                 <div className="space-y-6">
-                  <div className="flex gap-4">
-                    <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
-                      <Mail size={24} />
+                  {[
+                    { icon: <Mail size={24} />, title: 'Email', lines: ['support@kidsfashion.com', 'We reply within 24 hours'] },
+                    { icon: <Phone size={24} />, title: 'Phone', lines: ['+1 (555) 123-4567', 'Mon-Fri 9AM-6PM EST'] },
+                    { icon: <MapPin size={24} />, title: 'Address', lines: ['123 Fashion Street', 'New York, NY 10001', 'United States'] },
+                    { icon: <Clock size={24} />, title: 'Business Hours', lines: ['Mon-Fri: 9AM - 6PM', 'Sat: 10AM - 4PM', 'Sun: Closed'] }
+                  ].map((item, i) => (
+                    <div key={i} className="flex gap-4">
+                      <div className="flex-shrink-0 w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600">
+                        {item.icon}
+                      </div>
+                      <div>
+                        <h4 className="font-semibold mb-1">{item.title}</h4>
+                        {item.lines.map((line, idx) => (
+                          <p key={idx} className="text-gray-700 text-sm">{line}</p>
+                        ))}
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-semibold mb-1">Email</h4>
-                      <p className="text-gray-600">support@kidsfashion.com</p>
-                      <p className="text-gray-600 text-sm">We reply within 24 hours</p>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4">
-                    <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
-                      <Phone size={24} />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold mb-1">Phone</h4>
-                      <p className="text-gray-600">+1 (555) 123-4567</p>
-                      <p className="text-gray-600 text-sm">Mon-Fri 9AM-6PM EST</p>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4">
-                    <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
-                      <MapPin size={24} />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold mb-1">Address</h4>
-                      <p className="text-gray-600">123 Fashion Street</p>
-                      <p className="text-gray-600">New York, NY 10001</p>
-                      <p className="text-gray-600">United States</p>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4">
-                    <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
-                      <Clock size={24} />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold mb-1">Business Hours</h4>
-                      <p className="text-gray-600">Monday - Friday: 9AM - 6PM</p>
-                      <p className="text-gray-600">Saturday: 10AM - 4PM</p>
-                      <p className="text-gray-600">Sunday: Closed</p>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
 
-              {/* Quick Help + Social unchanged */}
-              <div className="bg-white p-6 rounded-lg shadow-lg">
+              <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
                 <h3 className="text-xl font-bold mb-4">Quick Help</h3>
                 <ul className="space-y-3">
-                  <li><a className="text-blue-600 hover:underline">→ Track Your Order</a></li>
-                  <li><a className="text-blue-600 hover:underline">→ Shipping Information</a></li>
-                  <li><a className="text-blue-600 hover:underline">→ Return Policy</a></li>
+                  <li><a className="text-green-600 hover:underline">→ Track Your Order</a></li>
+                  <li><a className="text-green-600 hover:underline">→ Shipping Information</a></li>
+                  <li><a className="text-green-600 hover:underline">→ Return Policy</a></li>
                 </ul>
               </div>
 
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 rounded-lg shadow-lg">
+              <div className="bg-gradient-to-r from-green-600 to-green-400 text-white p-6 rounded-2xl shadow-lg">
                 <h3 className="text-xl font-bold mb-4">Follow Us</h3>
                 <div className="flex gap-3">
-                  <button className="w-10 h-10 bg-white text-blue-600 rounded-full">f</button>
-                  <button className="w-10 h-10 bg-white text-blue-600 rounded-full">𝕏</button>
+                  <button className="w-10 h-10 bg-white text-green-600 rounded-full font-bold">f</button>
+                  <button className="w-10 h-10 bg-white text-green-600 rounded-full font-bold">𝕏</button>
                 </div>
               </div>
             </div>
@@ -204,10 +178,11 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <section className="py-16 bg-gray-200">
+      {/* Map Section */}
+      <section className="py-16 bg-gray-100">
         <div className="container mx-auto px-4">
-          <div className="bg-gray-300 h-96 rounded-lg flex items-center justify-center">
-            <p className="text-gray-600 text-xl">Map Location (Google Maps Integration)</p>
+          <div className="bg-gray-200 h-96 rounded-2xl flex items-center justify-center shadow-inner">
+            <p className="text-gray-500 text-xl">Map Location (Google Maps Integration)</p>
           </div>
         </div>
       </section>

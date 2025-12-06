@@ -1,16 +1,24 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { ShoppingCart, Menu, X, Search, Heart, User, Baby, Shirt } from 'lucide-react'
+import { useState } from "react";
+import Link from "next/link";
+import {
+  ShoppingCart,
+  Menu,
+  X,
+  Search,
+  Heart,
+  User,
+  Baby,
+  Shirt,
+} from "lucide-react";
 
 export function Header() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <header className="sticky top-0 bg-white shadow-sm z-50 border-b">
       <div className="w-full">
-
         {/* Top Bar */}
         <div className="bg-green-600 text-white text-center py-2 text-sm">
           🎉 Free Shipping on orders above ₹500 · Easy Returns · Premium Quality
@@ -18,11 +26,14 @@ export function Header() {
 
         {/* Main Header Section */}
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-
           {/* Logo */}
-          <Link href="/" className="text-3xl font-bold text-green-700 flex items-center gap-2">
-            <Baby className="text-green-700" size={30} />
-            Ribbitte
+          <Link href="/" className="flex items-center gap-2">
+            <img
+              src="/Ribbittt-02.jpg"
+              alt="Ribbitte Logo"
+              className="w-10 h-10 object-contain"
+            />
+            <span className="text-3xl font-bold text-green-700">Ribbitte</span>
           </Link>
 
           {/* Search Bar (Desktop Only) */}
@@ -42,20 +53,29 @@ export function Header() {
 
           {/* Icons */}
           <div className="flex items-center gap-5">
-            <Link href="/wishlist" className="hover:text-green-600 transition hidden md:block">
+            {/* <Link
+              href="/wishlist"
+              className="hover:text-green-600 transition hidden md:block"
+            >
               <Heart size={22} />
             </Link>
 
-            <Link href="/account" className="hover:text-green-600 transition hidden md:block">
+            <Link
+              href="/account"
+              className="hover:text-green-600 transition hidden md:block"
+            >
               <User size={22} />
             </Link>
 
-            <Link href="/cart" className="relative hover:text-green-600 transition">
+            <Link
+              href="/cart"
+              className="relative hover:text-green-600 transition"
+            >
               <ShoppingCart size={22} />
               <span className="absolute -top-2 -right-3 bg-green-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                 2
               </span>
-            </Link>
+            </Link> */}
 
             {/* Mobile Menu Toggle */}
             <button
@@ -71,11 +91,11 @@ export function Header() {
         <nav className="hidden md:flex justify-center gap-10 py-3 border-t bg-gray-50">
           {[
             { label: "Home", href: "/" },
-            { label: "Shop", href: "shop" },
-            { label: "New Arrivals", href: "new" },
-            { label: "Boys", href: "category/boys" },
-            { label: "Girls", href: "category/girls" },
-            { label: "Contact", href: "contact" },
+            { label: "Shop", href: "/service/shop" },
+            // { label: "New Arrivals", href: "new" },
+            // { label: "Boys", href: "category/boys" },
+            // { label: "Girls", href: "category/girls" },
+            { label: "Contact", href: "/service/contact" },
           ].map((item) => (
             <Link
               key={item.href}
@@ -91,14 +111,36 @@ export function Header() {
         {mobileMenuOpen && (
           <nav className="md:hidden bg-gray-50 border-t py-4 px-6 animate-fadeIn">
             <div className="flex flex-col gap-4 text-lg">
-              <Link href="/" onClick={() => setMobileMenuOpen(false)}>Home</Link>
-              <Link href="/shop" onClick={() => setMobileMenuOpen(false)}>Shop</Link>
-              <Link href="/new" onClick={() => setMobileMenuOpen(false)}>New Arrivals</Link>
-              <Link href="/category/boys" onClick={() => setMobileMenuOpen(false)}>Boys</Link>
-              <Link href="/category/girls" onClick={() => setMobileMenuOpen(false)}>Girls</Link>
-              <Link href="/contact" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
-              <Link href="/account" onClick={() => setMobileMenuOpen(false)}>My Account</Link>
-              <Link href="/wishlist" onClick={() => setMobileMenuOpen(false)}>Wishlist</Link>
+              <Link href="/" onClick={() => setMobileMenuOpen(false)}>
+                Home
+              </Link>
+              <Link href="/shop" onClick={() => setMobileMenuOpen(false)}>
+                Shop
+              </Link>
+              <Link href="/new" onClick={() => setMobileMenuOpen(false)}>
+                New Arrivals
+              </Link>
+              <Link
+                href="/category/boys"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Boys
+              </Link>
+              <Link
+                href="/category/girls"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Girls
+              </Link>
+              <Link href="/contact" onClick={() => setMobileMenuOpen(false)}>
+                Contact
+              </Link>
+              <Link href="/account" onClick={() => setMobileMenuOpen(false)}>
+                My Account
+              </Link>
+              <Link href="/wishlist" onClick={() => setMobileMenuOpen(false)}>
+                Wishlist
+              </Link>
             </div>
           </nav>
         )}
@@ -116,17 +158,26 @@ export function Header() {
           <span className="text-xs">Shop</span>
         </Link>
 
-        <Link href="/wishlist" className="flex flex-col items-center text-gray-700">
+        <Link
+          href="/wishlist"
+          className="flex flex-col items-center text-gray-700"
+        >
           <Heart size={22} />
           <span className="text-xs">Wishlist</span>
         </Link>
 
-        <Link href="/account" className="flex flex-col items-center text-gray-700">
+        <Link
+          href="/account"
+          className="flex flex-col items-center text-gray-700"
+        >
           <User size={22} />
           <span className="text-xs">Account</span>
         </Link>
 
-        <Link href="/cart" className="flex flex-col items-center text-gray-700 relative">
+        <Link
+          href="/cart"
+          className="flex flex-col items-center text-gray-700 relative"
+        >
           <ShoppingCart size={22} />
           <span className="absolute -top-1 -right-3 bg-green-600 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">
             2
@@ -135,5 +186,5 @@ export function Header() {
         </Link>
       </div>
     </header>
-  )
+  );
 }

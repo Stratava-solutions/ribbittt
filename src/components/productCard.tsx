@@ -1,42 +1,57 @@
-// src/components/ProductCard.tsx
-'use client'
-import Link from 'next/link'
-import Image from 'next/image'
-import { Heart, ShoppingCart } from 'lucide-react'
-import { useState } from 'react'
-import { toast } from 'react-hot-toast'
+"use client";
+
+import Link from "next/link";
+import Image from "next/image";
+import { Heart } from "lucide-react";
+import { useState } from "react";
+import { toast } from "react-hot-toast";
 
 interface Product {
-  _id: string
-  name: string
-  price: number
-  category: string
-  color: string
-  sizes: string[]
-  images: { url: string; thumbnailUrl: string }[]
-  stock: number
-  featured: boolean
+  _id: string;
+  name: string;
+  price: number;
+  category: string;
+  color: string;
+  sizes: string[];
+  images: { url: string; thumbnailUrl: string }[];
+  stock: number;
+  featured: boolean;
 }
 
-export function ProductCard({ product }: { product: Product }) {
-  const [isWishlisted, setIsWishlisted] = useState(false)
+const ADMIN_WHATSAPP_NUMBER = "919876543210"; // replace with admin number in international format
+
+export function ProductCard({
+  product,
+  hoverImages,
+  showTags,
+}: {
+  product: Product;
+  hoverImages: boolean;
+  showTags: boolean;
+}) {
+  const [isWishlisted, setIsWishlisted] = useState(false);
 
   const handleWishlist = (e: React.MouseEvent) => {
-    e.preventDefault()
-    setIsWishlisted(!isWishlisted)
-    toast.success(isWishlisted ? 'Removed from wishlist' : 'Added to wishlist', {
-      duration: 2000,
-    })
-  }
+    e.preventDefault();
+    setIsWishlisted(!isWishlisted);
+    toast.success(
+      isWishlisted ? "Removed from wishlist" : "Added to wishlist",
+      { duration: 2000 }
+    );
+  };
 
-  const handleAddToCart = (e: React.MouseEvent) => {
-    e.preventDefault()
-    toast.success('Added to cart!', {
-      duration: 2000,
-    })
-  }
+  const handleWhatsApp = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const message = `Hello, I'm interested in buying the product: ${
+      product.name
+    } (₹${product.price.toFixed(2)}). Could you provide more details?`;
+    const url = `https://wa.me/${ADMIN_WHATSAPP_NUMBER}?text=${encodeURIComponent(
+      message
+    )}`;
+    window.open(url, "_blank");
+  };
 
-  const isOutOfStock = product.stock === 0
+  const isOutOfStock = product.stock === 0;
 
   return (
     <div className="border rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 group bg-white">
@@ -55,15 +70,17 @@ export function ProductCard({ product }: { product: Product }) {
               <span className="text-gray-400">No Image</span>
             </div>
           )}
-          
+
           {/* Wishlist Button */}
-          <button 
+          <button
             onClick={handleWishlist}
             className="absolute top-4 right-4 p-2 bg-white rounded-full hover:bg-gray-100 transition shadow-md z-10"
           >
-            <Heart 
-              size={20} 
-              className={isWishlisted ? 'fill-red-500 text-red-500' : 'text-gray-600'}
+            <Heart
+              size={20}
+              className={
+                isWishlisted ? "fill-red-500 text-red-500" : "text-gray-600"
+              }
             />
           </button>
 
@@ -87,7 +104,7 @@ export function ProductCard({ product }: { product: Product }) {
           </div>
         </div>
       </Link>
-      
+
       <div className="p-4">
         <Link href={`/shop/${product._id}`}>
           <div className="mb-2">
@@ -99,11 +116,11 @@ export function ProductCard({ product }: { product: Product }) {
             </h3>
           </div>
         </Link>
-        
+
         <div className="flex items-center gap-2 mb-2 text-sm text-gray-600">
           <span className="capitalize">{product.color}</span>
           <span>•</span>
-          <span>{product.sizes.join(', ')}</span>
+          <span>{product.sizes.join(", ")}</span>
         </div>
 
         <div className="flex items-center justify-between mb-3">
@@ -115,19 +132,19 @@ export function ProductCard({ product }: { product: Product }) {
           </span>
         </div>
 
-        <button 
-          onClick={handleAddToCart}
+        {/* WhatsApp Button */}
+        <button
+          onClick={handleWhatsApp}
           disabled={isOutOfStock}
           className={`w-full py-2 rounded-lg transition flex items-center justify-center gap-2 font-medium ${
             isOutOfStock
-              ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-              : 'bg-blue-600 text-white hover:bg-blue-700 active:scale-95'
+              ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+              : "bg-green-600 text-white hover:bg-green-700 active:scale-95"
           }`}
         >
-          <ShoppingCart size={18} />
-          {isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
+          {isOutOfStock ? "Out of Stock" : "Contact via WhatsApp"}
         </button>
       </div>
     </div>
-  )
+  );
 }

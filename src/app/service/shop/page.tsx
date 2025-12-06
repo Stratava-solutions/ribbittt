@@ -1,4 +1,3 @@
-// FILE: src/app/shop/page.tsx
 "use client";
 import { Suspense } from "react";
 import { ShopContent } from "../../../components/shopContent";

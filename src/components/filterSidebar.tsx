@@ -1,4 +1,3 @@
-// src/components/FilterSidebar.tsx
 'use client'
 
 interface Filters {
@@ -27,135 +26,115 @@ export function FilterSidebar({ filters, setFilters, products }: FilterSidebarPr
     { value: 'all', label: 'All Prices' },
     { value: 'under250', label: 'Under ₹250' },
     { value: '250to350', label: '₹250 - ₹350' },
-    { value: 'over350', label: 'Over ₹350' }
+    { value: 'over350', label: 'Over ₹350' },
   ]
 
-  // Extract unique colors and sizes from products
   const uniqueColors = ['all', ...Array.from(new Set(products.map(p => p.color)))]
   const uniqueSizes = ['all', ...Array.from(new Set(products.flatMap(p => p.sizes)))]
 
-  // Count products for each filter option
-  const getCategoryCount = (cat: string) => {
-    if (cat === 'all') return products.length
-    return products.filter(p => p.category === cat).length
-  }
-
-  const getColorCount = (color: string) => {
-    if (color === 'all') return products.length
-    return products.filter(p => p.color === color).length
-  }
-
-  const getSizeCount = (size: string) => {
-    if (size === 'all') return products.length
-    return products.filter(p => p.sizes.includes(size)).length
-  }
-
+  const getCategoryCount = (cat: string) => cat === 'all' ? products.length : products.filter(p => p.category === cat).length
+  const getColorCount = (color: string) => color === 'all' ? products.length : products.filter(p => p.color === color).length
+  const getSizeCount = (size: string) => size === 'all' ? products.length : products.filter(p => p.sizes.includes(size)).length
   const getPriceRangeCount = (range: string) => {
-    if (range === 'all') return products.length
-    if (range === 'under25') return products.filter(p => p.price < 25).length
-    if (range === '25to35') return products.filter(p => p.price >= 25 && p.price <= 35).length
-    if (range === 'over35') return products.filter(p => p.price > 35).length
-    return 0
+    switch (range) {
+      case 'all': return products.length
+      case 'under250': return products.filter(p => p.price < 250).length
+      case '250to350': return products.filter(p => p.price >= 250 && p.price <= 350).length
+      case 'over350': return products.filter(p => p.price > 350).length
+      default: return 0
+    }
   }
+
+  const Pill = ({ active, label, count, onClick }: { active: boolean, label: string, count: number, onClick: () => void }) => (
+    <button
+      onClick={onClick}
+      className={`
+        w-full flex justify-between items-center px-3 py-2 rounded-lg text-sm transition-all
+        ${active
+          ? 'bg-rose-500 text-white shadow-md'
+          : 'bg-white border border-gray-200 text-gray-700 hover:bg-rose-50 hover:border-rose-200'}
+      `}
+    >
+      <span className="capitalize">{label}</span>
+      <span className="text-xs text-gray-500">({count})</span>
+    </button>
+  )
 
   return (
-    <div className="w-full md:w-64 flex-shrink-0">
-      <div className="border rounded-lg p-6 sticky top-24 bg-white">
-        <h2 className="text-xl font-bold mb-6">Filters</h2>
+    <div className="w-full md:w-72 flex-shrink-0">
+      <div className="sticky top-24 bg-white rounded-2xl shadow-lg p-6 space-y-6 border border-gray-100">
+        <h2 className="text-2xl font-semibold text-gray-900">Filters</h2>
 
-        {/* Category Filter */}
-        <div className="mb-6">
-          <h3 className="font-semibold mb-3">Category</h3>
-          <div className="space-y-2">
+        {/* Category */}
+        <div className="space-y-2">
+          <h3 className="text-gray-700 font-medium uppercase text-sm">Category</h3>
+          <div className="grid gap-2">
             {categories.map(cat => (
-              <label key={cat} className="flex items-center justify-between gap-2 cursor-pointer hover:bg-gray-50 p-1 rounded transition">
-                <div className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    name="category"
-                    checked={filters.category === cat}
-                    onChange={() => setFilters({ ...filters, category: cat })}
-                    className="cursor-pointer"
-                  />
-                  <span className="capitalize">{cat}</span>
-                </div>
-                <span className="text-xs text-gray-500">({getCategoryCount(cat)})</span>
-              </label>
+              <Pill
+                key={cat}
+                active={filters.category === cat}
+                label={cat}
+                count={getCategoryCount(cat)}
+                onClick={() => setFilters({ ...filters, category: cat })}
+              />
             ))}
           </div>
         </div>
 
-        {/* Price Range Filter */}
-        <div className="mb-6">
-          <h3 className="font-semibold mb-3">Price Range</h3>
-          <div className="space-y-2">
+        {/* Price Range */}
+        <div className="space-y-2">
+          <h3 className="text-gray-700 font-medium uppercase text-sm">Price</h3>
+          <div className="grid gap-2">
             {priceRanges.map(range => (
-              <label key={range.value} className="flex items-center justify-between gap-2 cursor-pointer hover:bg-gray-50 p-1 rounded transition">
-                <div className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    name="priceRange"
-                    checked={filters.priceRange === range.value}
-                    onChange={() => setFilters({ ...filters, priceRange: range.value })}
-                    className="cursor-pointer"
-                  />
-                  <span>{range.label}</span>
-                </div>
-                <span className="text-xs text-gray-500">({getPriceRangeCount(range.value)})</span>
-              </label>
+              <Pill
+                key={range.value}
+                active={filters.priceRange === range.value}
+                label={range.label}
+                count={getPriceRangeCount(range.value)}
+                onClick={() => setFilters({ ...filters, priceRange: range.value })}
+              />
             ))}
           </div>
         </div>
 
-        {/* Color Filter */}
-        <div className="mb-6">
-          <h3 className="font-semibold mb-3">Color</h3>
-          <div className="space-y-2 max-h-48 overflow-y-auto">
+        {/* Color */}
+        <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+          <h3 className="text-gray-700 font-medium uppercase text-sm">Color</h3>
+          <div className="grid gap-2">
             {uniqueColors.map(color => (
-              <label key={color} className="flex items-center justify-between gap-2 cursor-pointer hover:bg-gray-50 p-1 rounded transition">
-                <div className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    name="color"
-                    checked={filters.color === color}
-                    onChange={() => setFilters({ ...filters, color: color })}
-                    className="cursor-pointer"
-                  />
-                  <span className="capitalize">{color}</span>
-                </div>
-                <span className="text-xs text-gray-500">({getColorCount(color)})</span>
-              </label>
+              <Pill
+                key={color}
+                active={filters.color === color}
+                label={color}
+                count={getColorCount(color)}
+                onClick={() => setFilters({ ...filters, color })}
+              />
             ))}
           </div>
         </div>
 
-        {/* Size Filter */}
-        <div className="mb-6">
-          <h3 className="font-semibold mb-3">Size</h3>
-          <div className="space-y-2">
+        {/* Size */}
+        <div className="space-y-2">
+          <h3 className="text-gray-700 font-medium uppercase text-sm">Size</h3>
+          <div className="grid gap-2">
             {uniqueSizes.map(size => (
-              <label key={size} className="flex items-center justify-between gap-2 cursor-pointer hover:bg-gray-50 p-1 rounded transition">
-                <div className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    name="size"
-                    checked={filters.size === size}
-                    onChange={() => setFilters({ ...filters, size: size })}
-                    className="cursor-pointer"
-                  />
-                  <span className="uppercase">{size}</span>
-                </div>
-                <span className="text-xs text-gray-500">({getSizeCount(size)})</span>
-              </label>
+              <Pill
+                key={size}
+                active={filters.size === size}
+                label={size.toUpperCase()}
+                count={getSizeCount(size)}
+                onClick={() => setFilters({ ...filters, size })}
+              />
             ))}
           </div>
         </div>
 
-        <button 
+        {/* Clear All */}
+        <button
           onClick={() => setFilters({ category: 'all', priceRange: 'all', color: 'all', size: 'all' })}
-          className="w-full border border-blue-600 text-blue-600 py-2 rounded-lg hover:bg-blue-50 transition font-medium"
+          className="w-full py-2 rounded-xl bg-gradient-to-r from-rose-500 to-pink-400 text-white font-semibold shadow hover:scale-[1.02] transform transition"
         >
-          Clear Filters
+          Clear All Filters
         </button>
       </div>
     </div>

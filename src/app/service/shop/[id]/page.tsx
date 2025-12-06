@@ -1,10 +1,10 @@
-// src/app/shop/[id]/page.tsx
 'use client'
+
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Heart, ShoppingCart, ArrowLeft, Minus, Plus, Share2, Truck, Shield, RotateCcw } from 'lucide-react'
+import { Heart, ArrowLeft, Minus, Plus, Share2, Truck, Shield, RotateCcw } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 
 interface Product {
@@ -22,8 +22,10 @@ interface Product {
   createdAt: string
 }
 
+const ADMIN_WHATSAPP_NUMBER = '919876543210' // replace with admin's number
+
 export default function ProductDetailPage() {
-  const params = useParams()
+  const params:any = useParams()
   const router = useRouter()
   const [product, setProduct] = useState<Product | null>(null)
   const [loading, setLoading] = useState(true)
@@ -33,9 +35,7 @@ export default function ProductDetailPage() {
   const [isWishlisted, setIsWishlisted] = useState(false)
 
   useEffect(() => {
-    if (params.id) {
-      fetchProduct(params.id as string)
-    }
+    if (params.id) fetchProduct(params.id)
   }, [params.id])
 
   const fetchProduct = async (id: string) => {
@@ -46,49 +46,18 @@ export default function ProductDetailPage() {
       
       if (data.success) {
         setProduct(data.data)
-        if (data.data.sizes.length > 0) {
-          setSelectedSize(data.data.sizes[0])
-        }
+        if (data.data.sizes.length > 0) setSelectedSize(data.data.sizes[0])
       } else {
         toast.error('Product not found')
         router.push('/shop')
       }
     } catch (error) {
-      console.error('Fetch error:', error)
+      console.error(error)
       toast.error('Failed to load product')
       router.push('/shop')
     } finally {
       setLoading(false)
     }
-  }
-
-  const handleAddToCart = () => {
-    if (!selectedSize) {
-      toast.error('Please select a size')
-      return
-    }
-    if (quantity > (product?.stock || 0)) {
-      toast.error('Not enough stock available')
-      return
-    }
-    toast.success(`Added ${quantity} item(s) to cart!`, {
-      icon: '🛒',
-    })
-  }
-
-  const handleBuyNow = () => {
-    if (!selectedSize) {
-      toast.error('Please select a size')
-      return
-    }
-    if (quantity > (product?.stock || 0)) {
-      toast.error('Not enough stock available')
-      return
-    }
-    toast.success('Proceeding to checkout...', {
-      icon: '💳',
-    })
-    // Add your checkout logic here
   }
 
   const handleWishlist = () => {
@@ -115,6 +84,23 @@ export default function ProductDetailPage() {
     }
   }
 
+  const handleWhatsApp = () => {
+    if (!selectedSize) {
+      toast.error('Please select a size')
+      return
+    }
+    if (quantity > (product?.stock || 0)) {
+      toast.error('Not enough stock available')
+      return
+    }
+
+    const message = `Hello, I'm interested in buying the product: ${product?.name} (₹${product?.price.toFixed(
+      2
+    )}). Size: ${selectedSize}, Quantity: ${quantity}. Product Link: ${window.location.href}`
+    const url = `https://wa.me/${ADMIN_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
+    window.open(url, '_blank')
+  }
+
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
@@ -128,9 +114,7 @@ export default function ProductDetailPage() {
     )
   }
 
-  if (!product) {
-    return null
-  }
+  if (!product) return null
 
   const isOutOfStock = product.stock === 0
   const isLowStock = product.stock > 0 && product.stock <= 5
@@ -260,7 +244,7 @@ export default function ProductDetailPage() {
                   ₹{product.price.toFixed(2)}
                 </span>
                 {product.stock > 0 && (
-                  <span className="text-green-600 text-sm font-medium">
+                  <span className="text-gray-800 text-sm font-medium">
                     ✓ In Stock
                   </span>
                 )}
@@ -275,9 +259,7 @@ export default function ProductDetailPage() {
               <div className="mb-6">
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="font-semibold text-gray-900">Select Size</h3>
-                  <button className="text-sm text-blue-600 hover:text-blue-700">
-                    Size Guide
-                  </button>
+                  <button className="text-sm text-blue-600 hover:text-blue-700">Size Guide</button>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {product.sizes.map((size) => (
@@ -323,46 +305,30 @@ export default function ProductDetailPage() {
                 </div>
               </div>
 
-              {/* Action Buttons */}
-              <div className="space-y-3 mb-6">
-                <button
-                  onClick={handleAddToCart}
-                  disabled={isOutOfStock}
-                  className={`w-full py-4 rounded-lg font-semibold transition flex items-center justify-center gap-2 text-lg ${
-                    isOutOfStock
-                      ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                      : 'bg-blue-600 text-white hover:bg-blue-700 active:scale-[0.98] shadow-lg hover:shadow-xl'
-                  }`}
-                >
-                  <ShoppingCart size={22} />
-                  {isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
-                </button>
+              {/* WhatsApp Button */}
+              <button
+                onClick={handleWhatsApp}
+                disabled={isOutOfStock}
+                className={`w-full py-4 rounded-lg font-semibold transition flex items-center justify-center gap-2 text-lg ${
+                  isOutOfStock
+                    ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                    : 'bg-green-600 text-white hover:bg-green-700 active:scale-[0.98] shadow-lg hover:shadow-xl'
+                }`}
+              >
+                {isOutOfStock ? 'Out of Stock' : 'Contact via WhatsApp'}
+              </button>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <button
-                    onClick={handleBuyNow}
-                    disabled={isOutOfStock}
-                    className={`py-3 rounded-lg font-semibold transition ${
-                      isOutOfStock
-                        ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                        : 'bg-green-600 text-white hover:bg-green-700 active:scale-[0.98]'
-                    }`}
-                  >
-                    Buy Now
-                  </button>
-
-                  <button
-                    onClick={handleWishlist}
-                    className="py-3 border-2 border-gray-300 rounded-lg hover:bg-gray-50 transition font-semibold flex items-center justify-center gap-2"
-                  >
-                    <Heart
-                      size={20}
-                      className={isWishlisted ? 'fill-red-500 text-red-500' : 'text-gray-600'}
-                    />
-                    Wishlist
-                  </button>
-                </div>
-              </div>
+              {/* Wishlist Button */}
+              <button
+                onClick={handleWishlist}
+                className="mt-3 w-full py-3 border-2 border-gray-300 rounded-lg hover:bg-gray-50 transition font-semibold flex items-center justify-center gap-2"
+              >
+                <Heart
+                  size={20}
+                  className={isWishlisted ? 'fill-red-500 text-red-500' : 'text-gray-600'}
+                />
+                Wishlist
+              </button>
 
               {/* Features */}
               <div className="grid grid-cols-1 gap-3 pt-6 border-t">

@@ -1,219 +1,155 @@
-// FILE: src/app/admin/page.tsx
 'use client'
-import { useState } from 'react'
-import { Plus, Edit, Trash2, Eye, EyeOff } from 'lucide-react'
-import ProductModal from '../../../../components/productModal'
-import DeleteModal from '../../../../components/deleteProductModal'
+import { useState, useEffect } from 'react'
+import { Eye, EyeOff } from 'lucide-react'
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Legend } from 'recharts'
+import axios from 'axios'
 
-interface Product {
-  id: number
-  name: string
-  price: number
-  category: string
-  color: string
-  size: string
-  description: string
-  stock: number
-  isActive: boolean
-}
+const COLORS = ['#97cb4d', '#facc15', '#f87171']
 
 export default function AdminDashboard() {
-  const [products, setProducts] = useState<Product[]>([
-    { id: 1, name: 'Rainbow Dress', price: 29.99, category: 'dresses', color: 'multicolor', size: '2-4Y', description: 'Beautiful rainbow dress', stock: 15, isActive: true },
-    { id: 2, name: 'Denim Jacket', price: 34.99, category: 'outerwear', color: 'blue', size: '4-6Y', description: 'Classic denim jacket', stock: 10, isActive: true },
-    { id: 3, name: 'Cotton T-Shirt', price: 15.99, category: 'tops', color: 'white', size: '2-4Y', description: 'Soft cotton tee', stock: 25, isActive: false },
-  ])
+  const [products, setProducts] = useState<any[]>([])
+  const [contacts, setContacts] = useState<any[]>([])
 
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null)
-  const [deletingProductId, setDeletingProductId] = useState<number | null>(null)
-
-  const handleCreate = () => {
-    setEditingProduct(null)
-    setIsModalOpen(true)
+  // Fetch Products
+  const fetchProducts = async () => {
+    try {
+      const res = await axios.get('/api/products')
+      if(res.data.success) setProducts(res.data.data)
+    } catch(err) { console.error(err) }
   }
 
-  const handleEdit = (product: Product) => {
-    setEditingProduct(product)
-    setIsModalOpen(true)
+  // Fetch Contacts
+  const fetchContacts = async () => {
+    try {
+      const res = await axios.get('/api/contacts')
+      if(res.data.success) setContacts(res.data.data)
+    } catch(err) { console.error(err) }
   }
 
-  const handleDelete = (id: number) => {
-    setDeletingProductId(id)
-    setIsDeleteModalOpen(true)
-  }
+  useEffect(() => {
+    fetchProducts()
+    fetchContacts()
+  }, [])
 
-  const handleToggleActive = (id: number) => {
-    setProducts(products.map(p => 
-      p.id === id ? { ...p, isActive: !p.isActive } : p
-    ))
-  }
-
-  const handleSaveProduct = (productData: Omit<Product, 'id'>) => {
-    if (editingProduct) {
-      setProducts(products.map(p => 
-        p.id === editingProduct.id ? { ...productData, id: editingProduct.id } : p
-      ))
-    } else {
-      const newProduct = { ...productData, id: Date.now() }
-      setProducts([...products, newProduct])
-    }
-    setIsModalOpen(false)
-  }
-
-  const confirmDelete = () => {
-    if (deletingProductId) {
-      setProducts(products.filter(p => p.id !== deletingProductId))
-      setIsDeleteModalOpen(false)
-      setDeletingProductId(null)
-    }
-  }
+  // Charts Data
+  const activeInactiveData = [
+    { name: 'Active', value: products.filter(p => p.isActive).length },
+    { name: 'Inactive', value: products.filter(p => !p.isActive).length }
+  ]
+  const stockData = products.map(p => ({ name: p.name, stock: p.stock }))
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 p-6">
       {/* Header */}
-      <div className="bg-white border-b sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-800">Product Management</h1>
-              <p className="text-gray-600 mt-1">Manage your Ribbittt products</p>
-            </div>
-            <button
-              onClick={handleCreate}
-              className="bg-[#97cb4d] text-white px-6 py-3 rounded-lg hover:bg-[#88bc3e] transition flex items-center gap-2 font-semibold"
-            >
-              <Plus size={20} />
-              Add Product
-            </button>
-          </div>
+      <h1 className="text-3xl font-bold text-gray-900 mb-6">Admin Dashboard</h1>
+
+      {/* Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div className="bg-white p-4 rounded-lg shadow text-center">
+          <div className="text-gray-500">Total Products</div>
+          <div className="text-2xl font-bold text-gray-900">{products.length}</div>
+        </div>
+        <div className="bg-white p-4 rounded-lg shadow text-center">
+          <div className="text-gray-500">Active Products</div>
+          <div className="text-2xl font-bold text-gray-900">{products.filter(p => p.isActive).length}</div>
+        </div>
+        <div className="bg-white p-4 rounded-lg shadow text-center">
+          <div className="text-gray-500">Inactive Products</div>
+          <div className="text-2xl font-bold text-gray-900">{products.filter(p => !p.isActive).length}</div>
+        </div>
+        <div className="bg-white p-4 rounded-lg shadow text-center">
+          <div className="text-gray-500">Total Stock</div>
+          <div className="text-2xl font-bold text-gray-900">{products.reduce((sum, p) => sum + p.stock, 0)}</div>
         </div>
       </div>
 
-      {/* Stats Cards */}
-      <div className="container mx-auto px-4 py-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-lg p-6 shadow-sm border">
-            <div className="text-gray-600 text-sm font-medium">Total Products</div>
-            <div className="text-3xl font-bold text-gray-800 mt-2">{products.length}</div>
-          </div>
-          <div className="bg-white rounded-lg p-6 shadow-sm border">
-            <div className="text-gray-600 text-sm font-medium">Active Products</div>
-            <div className="text-3xl font-bold text-[#97cb4d] mt-2">
-              {products.filter(p => p.isActive).length}
-            </div>
-          </div>
-          <div className="bg-white rounded-lg p-6 shadow-sm border">
-            <div className="text-gray-600 text-sm font-medium">Inactive Products</div>
-            <div className="text-3xl font-bold text-orange-500 mt-2">
-              {products.filter(p => !p.isActive).length}
-            </div>
-          </div>
-          <div className="bg-white rounded-lg p-6 shadow-sm border">
-            <div className="text-gray-600 text-sm font-medium">Total Stock</div>
-            <div className="text-3xl font-bold text-blue-600 mt-2">
-              {products.reduce((sum, p) => sum + p.stock, 0)}
-            </div>
-          </div>
-        </div>
-
-        {/* Products Table */}
-        <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50 border-b">
-                <tr>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Product</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Category</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Price</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Stock</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Status</th>
-                  <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y">
-                {products.map((product) => (
-                  <tr key={product.id} className="hover:bg-gray-50 transition">
-                    <td className="px-6 py-4">
-                      <div>
-                        <div className="font-medium text-gray-900">{product.name}</div>
-                        <div className="text-sm text-gray-500">{product.size} • {product.color}</div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className="inline-block px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm capitalize">
-                        {product.category}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 font-semibold text-gray-900">${product.price}</td>
-                    <td className="px-6 py-4">
-                      <span className={`font-medium ${product.stock < 10 ? 'text-red-600' : 'text-gray-900'}`}>
-                        {product.stock}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <button
-                        onClick={() => handleToggleActive(product.id)}
-                        className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium ${
-                          product.isActive 
-                            ? 'bg-green-100 text-green-700 hover:bg-green-200' 
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                        }`}
-                      >
-                        {product.isActive ? (
-                          <>
-                            <Eye size={14} />
-                            Active
-                          </>
-                        ) : (
-                          <>
-                            <EyeOff size={14} />
-                            Inactive
-                          </>
-                        )}
-                      </button>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex justify-end gap-2">
-                        <button
-                          onClick={() => handleEdit(product)}
-                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition"
-                          title="Edit"
-                        >
-                          <Edit size={18} />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(product.id)}
-                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"
-                          title="Delete"
-                        >
-                          <Trash2 size={18} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
+      {/* Charts */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div className="bg-white p-4 rounded-lg shadow h-64">
+          <h2 className="text-lg font-bold mb-2 text-gray-900">Active vs Inactive Products</h2>
+          <ResponsiveContainer width="100%" height="80%">
+            <PieChart>
+              <Pie data={activeInactiveData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={60} label>
+                {activeInactiveData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
-              </tbody>
-            </table>
-          </div>
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="bg-white p-4 rounded-lg shadow h-64">
+          <h2 className="text-lg font-bold mb-2 text-gray-900">Stock per Product</h2>
+          <ResponsiveContainer width="100%" height="80%">
+            <BarChart data={stockData}>
+              <XAxis dataKey="name" stroke="#333" />
+              <YAxis stroke="#333" />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="stock" fill="#2563eb" />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       </div>
 
-      {/* Modals */}
-      <ProductModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSave={handleSaveProduct}
-        product={editingProduct}
-      />
+      {/* Products Table */}
+      <div className="bg-white p-4 rounded-lg shadow mb-6 overflow-x-auto">
+        <h2 className="text-xl font-bold mb-4 text-gray-900">Products List</h2>
+        <table className="w-full">
+          <thead>
+            <tr className="text-left text-gray-700 border-b">
+              <th className="px-4 py-2">Product</th>
+              <th className="px-4 py-2">Category</th>
+              <th className="px-4 py-2">Price</th>
+              <th className="px-4 py-2">Stock</th>
+              <th className="px-4 py-2">Status</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y">
+            {products.map(p => (
+              <tr key={p._id} className="hover:bg-gray-50 transition">
+                <td className="px-4 py-2">{p.name}</td>
+                <td className="px-4 py-2">{p.category}</td>
+                <td className="px-4 py-2">${p.price}</td>
+                <td className="px-4 py-2">{p.stock}</td>
+                <td className="px-4 py-2">
+                  <span className={`px-2 py-1 rounded-full text-sm ${p.isActive ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-600'}`}>
+                    {p.isActive ? 'Active' : 'Inactive'}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-      <DeleteModal
-        isOpen={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
-        onConfirm={confirmDelete}
-        productName={products.find(p => p.id === deletingProductId)?.name || ''}
-      />
+      {/* Contacts Table */}
+      <div className="bg-white p-4 rounded-lg shadow overflow-x-auto">
+        <h2 className="text-xl font-bold mb-4 text-gray-900">Contact Requests</h2>
+        <table className="w-full">
+          <thead>
+            <tr className="text-left text-gray-700 border-b">
+              <th className="px-4 py-2">Name</th>
+              <th className="px-4 py-2">Email</th>
+              <th className="px-4 py-2">Phone</th>
+              <th className="px-4 py-2">Subject</th>
+              <th className="px-4 py-2">Message</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y">
+            {contacts.map(c => (
+              <tr key={c._id} className="hover:bg-gray-50 transition">
+                <td className="px-4 py-2">{c.name}</td>
+                <td className="px-4 py-2">{c.email}</td>
+                <td className="px-4 py-2">{c.phone || '-'}</td>
+                <td className="px-4 py-2">{c.subject}</td>
+                <td className="px-4 py-2">{c.message}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   )
 }
