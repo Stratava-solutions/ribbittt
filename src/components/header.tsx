@@ -1,189 +1,251 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import {
-  ShoppingCart,
-  Menu,
-  X,
-  Search,
-  Heart,
-  User,
-  Baby,
-  Shirt,
-} from "lucide-react";
+import { Menu, X, Home, ShoppingBag, Info, Phone, Sparkles } from "lucide-react";
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 bg-white shadow-sm z-50 border-b">
+    <header className="sticky top-0 bg-white shadow-md z-50">
       <div className="w-full">
-        {/* Top Bar */}
-        <div className="bg-green-600 text-white text-center py-2 text-sm">
-          🎉 Free Shipping on orders above ₹500 · Easy Returns · Premium Quality
-        </div>
-
-        {/* Main Header Section */}
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
-            <img
-              src="/Ribbittt-02.jpg"
-              alt="Ribbitte Logo"
-              className="w-10 h-10 object-contain"
-            />
-            <span className="text-3xl font-bold text-green-700">Ribbitte</span>
-          </Link>
-
-          {/* Search Bar (Desktop Only) */}
-          <div className="hidden md:flex flex-1 justify-center px-6">
-            <div className="w-full max-w-xl relative">
-              <input
-                type="text"
-                placeholder="Search for products..."
-                className="w-full border rounded-full py-2 px-4 pr-10 shadow-sm focus:ring-2 focus:ring-green-400 outline-none"
-              />
-              <Search
-                size={20}
-                className="absolute right-3 top-2.5 text-gray-500 cursor-pointer"
-              />
+        {/* Top Announcement Bar */}
+        <div className="text-white overflow-hidden" style={{ backgroundColor: '#00a63e' }}>
+          <div className="animate-slide">
+            <div className="flex items-center justify-center gap-8 py-2.5 px-4 text-sm font-medium whitespace-nowrap">
+              <span className="flex items-center gap-2">
+                <Sparkles size={16} />
+                Free Shipping on orders above ₹500
+              </span>
+              <span>•</span>
+              <span>Easy 30-Day Returns</span>
+              <span>•</span>
+              <span>Premium Quality Guaranteed</span>
+              <span>•</span>
+              <span className="flex items-center gap-2">
+                <Sparkles size={16} />
+                New Spring Collection 2025
+              </span>
             </div>
           </div>
+        </div>
 
-          {/* Icons */}
-          <div className="flex items-center gap-5">
-            {/* <Link
-              href="/wishlist"
-              className="hover:text-green-600 transition hidden md:block"
-            >
-              <Heart size={22} />
-            </Link>
-
-            <Link
-              href="/account"
-              className="hover:text-green-600 transition hidden md:block"
-            >
-              <User size={22} />
-            </Link>
-
-            <Link
-              href="/cart"
-              className="relative hover:text-green-600 transition"
-            >
-              <ShoppingCart size={22} />
-              <span className="absolute -top-2 -right-3 bg-green-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                2
-              </span>
-            </Link> */}
-
-            {/* Mobile Menu Toggle */}
+        {/* Main Header */}
+        <div className="container mx-auto px-4 py-5">
+          <div className="flex items-center justify-between">
+            {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden text-gray-700"
+              className="md:hidden p-2 hover:bg-green-50 rounded-xl transition-all"
+              aria-label="Toggle menu"
             >
-              {mobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
+              {mobileMenuOpen ? (
+                <X size={24} className="text-gray-700" />
+              ) : (
+                <Menu size={24} className="text-gray-700" />
+              )}
             </button>
+
+            {/* Logo */}
+            <a href="/" className="flex items-center gap-4 group">
+              <div className="relative">
+                {/* Decorative background shape */}
+                <div className="absolute inset-0 rounded-2xl transform rotate-3 transition-transform group-hover:rotate-6" style={{ backgroundColor: '#00a63e20' }}></div>
+                
+                {/* Logo container */}
+                <div className="relative bg-white rounded-2xl p-3 shadow-md group-hover:shadow-xl transition-all border-2" style={{ borderColor: '#00a63e' }}>
+                  <img
+                    src="/Ribbittt-02.jpg"
+                    alt="RIBBITT Logo"
+                    className="w-12 h-12 object-contain"
+                  />
+                </div>
+                
+                {/* Pulse indicator */}
+                <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full animate-pulse shadow-lg" style={{ backgroundColor: '#00a63e' }}>
+                  <div className="absolute inset-0 rounded-full animate-ping" style={{ backgroundColor: '#00a63e50' }}></div>
+                </div>
+              </div>
+              
+              {/* Brand text */}
+              <div className="flex flex-col">
+                <span className="text-3xl md:text-4xl font-extrabold tracking-tight" style={{ color: '#00a63e' }}>
+                  RIBBITT
+                </span>
+                <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: '#00a63e80' }}>
+                  Kids Fashion
+                </span>
+              </div>
+            </a>
+
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center gap-2">
+              {[
+                { label: "Home", href: "/", icon: <Home size={18} /> },
+                { label: "Shop", href: "/service/shop", icon: <ShoppingBag size={18} /> },
+                { label: "About Us", href: "/service/about", icon: <Info size={18} /> },
+                { label: "Contact", href: "/service/contact", icon: <Phone size={18} /> },
+              ].map((item) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  className="flex items-center gap-2 px-6 py-3 text-gray-700 hover:text-white font-semibold transition-all rounded-full hover:shadow-lg transform hover:scale-105"
+                  style={{ 
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#00a63e';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                  }}
+                >
+                  {item.icon}
+                  <span>{item.label}</span>
+                </a>
+              ))}
+            </nav>
+
+            {/* CTA Button - Desktop */}
+            <a
+              href="/service/shop"
+              className="hidden md:flex items-center gap-2 px-6 py-3 rounded-full text-white font-bold transition-all shadow-lg transform hover:scale-105 hover:shadow-xl"
+              style={{ backgroundColor: '#00a63e' }}
+            >
+              <ShoppingBag size={18} />
+              Shop Now
+            </a>
+
+            {/* Placeholder for mobile alignment */}
+            <div className="md:hidden w-10"></div>
           </div>
         </div>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex justify-center gap-10 py-3 border-t bg-gray-50">
-          {[
-            { label: "Home", href: "/" },
-            { label: "Shop", href: "/service/shop" },
-            // { label: "New Arrivals", href: "new" },
-            // { label: "Boys", href: "category/boys" },
-            // { label: "Girls", href: "category/girls" },
-            { label: "Contact", href: "/service/contact" },
-          ].map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="text-gray-700 hover:text-green-600 font-medium transition"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-
-        {/* Mobile Menu */}
+        {/* Mobile Menu Dropdown */}
         {mobileMenuOpen && (
-          <nav className="md:hidden bg-gray-50 border-t py-4 px-6 animate-fadeIn">
-            <div className="flex flex-col gap-4 text-lg">
-              <Link href="/" onClick={() => setMobileMenuOpen(false)}>
-                Home
-              </Link>
-              <Link href="/shop" onClick={() => setMobileMenuOpen(false)}>
-                Shop
-              </Link>
-              <Link href="/new" onClick={() => setMobileMenuOpen(false)}>
-                New Arrivals
-              </Link>
-              <Link
-                href="/category/boys"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Boys
-              </Link>
-              <Link
-                href="/category/girls"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Girls
-              </Link>
-              <Link href="/contact" onClick={() => setMobileMenuOpen(false)}>
-                Contact
-              </Link>
-              <Link href="/account" onClick={() => setMobileMenuOpen(false)}>
-                My Account
-              </Link>
-              <Link href="/wishlist" onClick={() => setMobileMenuOpen(false)}>
-                Wishlist
-              </Link>
-            </div>
-          </nav>
+          <div className="md:hidden bg-gradient-to-b from-white to-green-50/30 border-t border-gray-100 shadow-xl">
+            <nav className="container mx-auto px-4 py-6">
+              <div className="flex flex-col gap-2">
+                {[
+                  { label: "Home", href: "/", icon: <Home size={22} /> },
+                  { label: "Shop", href: "/service/shop", icon: <ShoppingBag size={22} /> },
+                  { label: "About Us", href: "/service/about", icon: <Info size={22} /> },
+                  { label: "Contact", href: "/service/contact", icon: <Phone size={22} /> },
+                ].map((item) => (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="group flex items-center gap-4 px-5 py-4 text-gray-700 hover:text-white rounded-2xl transition-all font-semibold shadow-sm hover:shadow-lg transform hover:scale-105 bg-white"
+                    style={{ 
+                      transition: 'all 0.3s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#00a63e';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'white';
+                    }}
+                  >
+                    <div className="p-2 rounded-xl bg-green-50 group-hover:bg-white/20 transition-colors">
+                      {item.icon}
+                    </div>
+                    <span className="text-lg">{item.label}</span>
+                  </a>
+                ))}
+              </div>
+
+              {/* Mobile CTA */}
+              <div className="mt-6 pt-6 border-t border-gray-200">
+                <a
+                  href="/service/shop"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center gap-3 px-6 py-4 rounded-2xl text-white font-bold transition-all shadow-lg transform hover:scale-105"
+                  style={{ backgroundColor: '#00a63e' }}
+                >
+                  <ShoppingBag size={22} />
+                  <span className="text-lg">Start Shopping</span>
+                </a>
+              </div>
+
+              {/* Mobile Info */}
+              <div className="mt-6 text-center">
+                <p className="text-sm text-gray-600 font-medium">
+                  Premium Kids Fashion • Ages 0-10
+                </p>
+              </div>
+            </nav>
+          </div>
         )}
       </div>
 
-      {/* Mobile Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg py-2 px-6 flex justify-between md:hidden">
-        <Link href="/" className="flex flex-col items-center text-gray-700">
-          <Baby size={22} />
-          <span className="text-xs">Home</span>
-        </Link>
+      {/* Mobile Bottom Navigation Bar */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-2xl md:hidden z-50 backdrop-blur-lg bg-white/95">
+        <div className="grid grid-cols-4 h-16">
+          <a
+            href="/"
+            className="flex flex-col items-center justify-center gap-1 text-gray-600 transition-all relative group"
+            style={{ color: '#666' }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = '#00a63e';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = '#666';
+            }}
+          >
+            <Home size={24} className="group-hover:scale-110 transition-transform" />
+            <span className="text-xs font-semibold">Home</span>
+            <div className="absolute bottom-0 w-0 h-1 group-hover:w-12 transition-all rounded-t-full" style={{ backgroundColor: '#00a63e' }}></div>
+          </a>
 
-        <Link href="/shop" className="flex flex-col items-center text-gray-700">
-          <Shirt size={22} />
-          <span className="text-xs">Shop</span>
-        </Link>
+          <a
+            href="/service/shop"
+            className="flex flex-col items-center justify-center gap-1 text-gray-600 transition-all relative group"
+            style={{ color: '#666' }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = '#00a63e';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = '#666';
+            }}
+          >
+            <ShoppingBag size={24} className="group-hover:scale-110 transition-transform" />
+            <span className="text-xs font-semibold">Shop</span>
+            <div className="absolute bottom-0 w-0 h-1 group-hover:w-12 transition-all rounded-t-full" style={{ backgroundColor: '#00a63e' }}></div>
+          </a>
 
-        <Link
-          href="/wishlist"
-          className="flex flex-col items-center text-gray-700"
-        >
-          <Heart size={22} />
-          <span className="text-xs">Wishlist</span>
-        </Link>
+          <a
+            href="/service/about"
+            className="flex flex-col items-center justify-center gap-1 text-gray-600 transition-all relative group"
+            style={{ color: '#666' }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = '#00a63e';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = '#666';
+            }}
+          >
+            <Info size={24} className="group-hover:scale-110 transition-transform" />
+            <span className="text-xs font-semibold">About</span>
+            <div className="absolute bottom-0 w-0 h-1 group-hover:w-12 transition-all rounded-t-full" style={{ backgroundColor: '#00a63e' }}></div>
+          </a>
 
-        <Link
-          href="/account"
-          className="flex flex-col items-center text-gray-700"
-        >
-          <User size={22} />
-          <span className="text-xs">Account</span>
-        </Link>
-
-        <Link
-          href="/cart"
-          className="flex flex-col items-center text-gray-700 relative"
-        >
-          <ShoppingCart size={22} />
-          <span className="absolute -top-1 -right-3 bg-green-600 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">
-            2
-          </span>
-          <span className="text-xs">Cart</span>
-        </Link>
+          <a
+            href="/service/contact"
+            className="flex flex-col items-center justify-center gap-1 text-gray-600 transition-all relative group"
+            style={{ color: '#666' }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = '#00a63e';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = '#666';
+            }}
+          >
+            <Phone size={24} className="group-hover:scale-110 transition-transform" />
+            <span className="text-xs font-semibold">Contact</span>
+            <div className="absolute bottom-0 w-0 h-1 group-hover:w-12 transition-all rounded-t-full" style={{ backgroundColor: '#00a63e' }}></div>
+          </a>
+        </div>
       </div>
     </header>
   );

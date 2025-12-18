@@ -1,105 +1,115 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import { useParams, useRouter } from 'next/navigation'
-import Image from 'next/image'
-import Link from 'next/link'
-import { Heart, ArrowLeft, Minus, Plus, Share2, Truck, Shield, RotateCcw } from 'lucide-react'
-import { toast } from 'react-hot-toast'
+import { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+import {
+  Heart,
+  ArrowLeft,
+  Minus,
+  Plus,
+  Share2,
+  Truck,
+  Shield,
+  RotateCcw,
+} from "lucide-react";
+import { toast } from "react-toastify";
 
 interface Product {
-  _id: string
-  name: string
-  price: number
-  category: string
-  color: string
-  sizes: string[]
-  description: string
-  images: { url: string; thumbnailUrl: string }[]
-  stock: number
-  sold: number
-  featured: boolean
-  createdAt: string
+  _id: string;
+  name: string;
+  price: number;
+  category: string;
+  color: string;
+  sizes: string[];
+  description: string;
+  images: { url: string; thumbnailUrl: string }[];
+  stock: number;
+  sold: number;
+  featured: boolean;
+  createdAt: string;
 }
 
-const ADMIN_WHATSAPP_NUMBER = process.env.NEXT_APP_ADMIN_WHATSAPP_NUMBER || ""
+const ADMIN_WHATSAPP_NUMBER = process.env.NEXT_APP_ADMIN_WHATSAPP_NUMBER || "";
 
 export default function ProductDetailPage() {
-  const params:any = useParams()
-  const router = useRouter()
-  const [product, setProduct] = useState<Product | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [selectedImage, setSelectedImage] = useState(0)
-  const [selectedSize, setSelectedSize] = useState('')
-  const [quantity, setQuantity] = useState(1)
-  const [isWishlisted, setIsWishlisted] = useState(false)
+  const params: any = useParams();
+  const router = useRouter();
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [selectedSize, setSelectedSize] = useState("");
+  const [quantity, setQuantity] = useState(1);
+  const [isWishlisted, setIsWishlisted] = useState(false);
 
   useEffect(() => {
-    if (params.id) fetchProduct(params.id)
-  }, [params.id])
+    if (params.id) fetchProduct(params.id);
+  }, [params.id]);
 
   const fetchProduct = async (id: string) => {
     try {
-      setLoading(true)
-      const response = await fetch(`/api/products/${id}`)
-      const data = await response.json()
-      
+      setLoading(true);
+      const response = await fetch(`/api/products/${id}`);
+      const data = await response.json();
+
       if (data.success) {
-        setProduct(data.data)
-        if (data.data.sizes.length > 0) setSelectedSize(data.data.sizes[0])
+        setProduct(data.data);
+        if (data.data.sizes.length > 0) setSelectedSize(data.data.sizes[0]);
       } else {
-        toast.error('Product not found')
-        router.push('/shop')
+        toast.error("Product not found");
+        router.push("/shop");
       }
     } catch (error) {
-      console.error(error)
-      toast.error('Failed to load product')
-      router.push('/shop')
+      toast.error("Failed to load product");
+      router.push("/shop");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleWishlist = () => {
-    setIsWishlisted(!isWishlisted)
-    toast.success(isWishlisted ? 'Removed from wishlist' : 'Added to wishlist', {
-      icon: isWishlisted ? '💔' : '❤️',
-    })
-  }
+    setIsWishlisted(!isWishlisted);
+    toast.success(isWishlisted ? "Removed from wishlist" : "Added to wishlist");
+  };
 
   const handleShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: product?.name,
-          text: `Check out ${product?.name}`,
-          url: window.location.href,
-        })
-      } catch (error) {
-        console.log('Share failed:', error)
-      }
-    } else {
-      navigator.clipboard.writeText(window.location.href)
-      toast.success('Link copied to clipboard!')
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast.success("Link copied to clipboard!");
+    } catch (error) {
+      toast.error("Failed to copy link");
     }
-  }
+  };
 
   const handleWhatsApp = () => {
     if (!selectedSize) {
-      toast.error('Please select a size')
-      return
-    }
-    if (quantity > (product?.stock || 0)) {
-      toast.error('Not enough stock available')
-      return
+      toast.error("Please select a size");
+      return;
     }
 
-    const message = `Hello, I'm interested in buying the product: ${product?.name} (₹${product?.price.toFixed(
-      2
-    )}). Size: ${selectedSize}, Quantity: ${quantity}. Product Link: ${window.location.href}`
-    const url = `https://wa.me/${ADMIN_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
-    window.open(url, '_blank')
-  }
+    if (quantity > (product?.stock ?? 0)) {
+      toast.error("Not enough stock available");
+      return;
+    }
+
+    const phone = ADMIN_WHATSAPP_NUMBER.replace(/\D/g, "");
+    const message = `
+Hello, I'm interested in buying this product:
+
+🧸 Product: ${product?.name}
+💰 Price: ₹${product?.price?.toFixed(2)}
+📏 Size: ${selectedSize}
+📦 Quantity: ${quantity}
+
+🔗 Product Link:
+${window.location.href}
+  `.trim();
+
+    const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
 
   if (loading) {
     return (
@@ -111,24 +121,31 @@ export default function ProductDetailPage() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
-  if (!product) return null
+  if (!product) return null;
 
-  const isOutOfStock = product.stock === 0
-  const isLowStock = product.stock > 0 && product.stock <= 5
+  const isOutOfStock = product.stock === 0;
+  const isLowStock = product.stock > 0 && product.stock <= 5;
 
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm text-gray-600 mb-6">
-          <Link href="/" className="hover:text-blue-600">Home</Link>
+          <Link href="/" className="hover:text-blue-600">
+            Home
+          </Link>
           <span>/</span>
-          <Link href="/shop" className="hover:text-blue-600">Shop</Link>
+          <Link href="/service/shop" className="hover:text-blue-600">
+            Shop
+          </Link>
           <span>/</span>
-          <Link href={`/shop?category=${product.category}`} className="hover:text-blue-600 capitalize">
+          <Link
+            href={`/service/shop?category=${product.category}`}
+            className="hover:text-blue-600 capitalize"
+          >
             {product.category}
           </Link>
           <span>/</span>
@@ -136,8 +153,8 @@ export default function ProductDetailPage() {
         </div>
 
         {/* Back Button */}
-        <Link 
-          href="/shop"
+        <Link
+          href="/service/shop"
           className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition font-medium"
         >
           <ArrowLeft size={20} />
@@ -200,8 +217,8 @@ export default function ProductDetailPage() {
                       onClick={() => setSelectedImage(index)}
                       className={`relative aspect-square rounded-lg overflow-hidden border-2 transition ${
                         selectedImage === index
-                          ? 'border-blue-600 ring-2 ring-blue-200'
-                          : 'border-gray-200 hover:border-gray-300'
+                          ? "border-blue-600 ring-2 ring-blue-200"
+                          : "border-gray-200 hover:border-gray-300"
                       }`}
                     >
                       <Image
@@ -222,7 +239,9 @@ export default function ProductDetailPage() {
                 <span className="inline-block bg-blue-100 text-blue-700 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wide mb-3">
                   {product.category}
                 </span>
-                <h1 className="text-3xl lg:text-4xl font-bold mb-3 text-gray-900">{product.name}</h1>
+                <h1 className="text-3xl lg:text-4xl font-bold mb-3 text-gray-900">
+                  {product.name}
+                </h1>
                 <div className="flex items-center gap-4 text-sm">
                   <span className="flex items-center gap-1 text-gray-600">
                     <span className="font-medium">Color:</span>
@@ -234,7 +253,10 @@ export default function ProductDetailPage() {
                   </span>
                   <span className="text-gray-400">•</span>
                   <span className="text-gray-600">
-                    SKU: <span className="font-medium">{product._id.slice(-8).toUpperCase()}</span>
+                    SKU:{" "}
+                    <span className="font-medium">
+                      {product._id.slice(-8).toUpperCase()}
+                    </span>
                   </span>
                 </div>
               </div>
@@ -251,15 +273,21 @@ export default function ProductDetailPage() {
               </div>
 
               <div className="mb-6 pb-6 border-b">
-                <h3 className="font-semibold text-gray-900 mb-2">Description</h3>
-                <p className="text-gray-700 leading-relaxed">{product.description}</p>
+                <h3 className="font-semibold text-gray-900 mb-2">
+                  Description
+                </h3>
+                <p className="text-gray-700 leading-relaxed">
+                  {product.description}
+                </p>
               </div>
 
               {/* Size Selection */}
               <div className="mb-6">
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="font-semibold text-gray-900">Select Size</h3>
-                  <button className="text-sm text-blue-600 hover:text-blue-700">Size Guide</button>
+                  <button className="text-sm text-blue-600 hover:text-blue-700">
+                    Size Guide
+                  </button>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {product.sizes.map((size) => (
@@ -268,8 +296,8 @@ export default function ProductDetailPage() {
                       onClick={() => setSelectedSize(size)}
                       className={`px-5 py-2.5 border-2 rounded-lg font-medium transition ${
                         selectedSize === size
-                          ? 'border-blue-600 bg-blue-600 text-white'
-                          : 'border-gray-300 hover:border-gray-400 text-gray-700'
+                          ? "border-blue-600 bg-blue-600 text-white"
+                          : "border-gray-300 hover:border-gray-400 text-gray-700"
                       }`}
                     >
                       {size}
@@ -290,9 +318,13 @@ export default function ProductDetailPage() {
                     >
                       <Minus size={20} />
                     </button>
-                    <span className="px-6 py-2 font-bold text-lg min-w-[60px] text-center">{quantity}</span>
+                    <span className="px-6 py-2 font-bold text-lg min-w-[60px] text-center">
+                      {quantity}
+                    </span>
                     <button
-                      onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
+                      onClick={() =>
+                        setQuantity(Math.min(product.stock, quantity + 1))
+                      }
                       className="p-3 hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed"
                       disabled={isOutOfStock}
                     >
@@ -300,7 +332,8 @@ export default function ProductDetailPage() {
                     </button>
                   </div>
                   <span className="text-sm text-gray-600">
-                    <span className="font-medium">{product.stock}</span> available
+                    <span className="font-medium">{product.stock}</span>{" "}
+                    available
                   </span>
                 </div>
               </div>
@@ -311,11 +344,11 @@ export default function ProductDetailPage() {
                 disabled={isOutOfStock}
                 className={`w-full py-4 rounded-lg font-semibold transition flex items-center justify-center gap-2 text-lg ${
                   isOutOfStock
-                    ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                    : 'bg-green-600 text-white hover:bg-green-700 active:scale-[0.98] shadow-lg hover:shadow-xl'
+                    ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                    : "bg-green-600 text-white hover:bg-green-700 active:scale-[0.98] shadow-lg hover:shadow-xl"
                 }`}
               >
-                {isOutOfStock ? 'Out of Stock' : 'Contact via WhatsApp'}
+                {isOutOfStock ? "Out of Stock" : "Contact via WhatsApp"}
               </button>
 
               {/* Wishlist Button */}
@@ -325,7 +358,9 @@ export default function ProductDetailPage() {
               >
                 <Heart
                   size={20}
-                  className={isWishlisted ? 'fill-red-500 text-red-500' : 'text-gray-600'}
+                  className={
+                    isWishlisted ? "fill-red-500 text-red-500" : "text-gray-600"
+                  }
                 />
                 Wishlist
               </button>
@@ -347,7 +382,9 @@ export default function ProductDetailPage() {
                   </div>
                   <div>
                     <p className="font-medium text-gray-900">Secure Payment</p>
-                    <p className="text-gray-600 text-xs">100% secure transactions</p>
+                    <p className="text-gray-600 text-xs">
+                      100% secure transactions
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
@@ -356,7 +393,9 @@ export default function ProductDetailPage() {
                   </div>
                   <div>
                     <p className="font-medium text-gray-900">Easy Returns</p>
-                    <p className="text-gray-600 text-xs">30-day return policy</p>
+                    <p className="text-gray-600 text-xs">
+                      30-day return policy
+                    </p>
                   </div>
                 </div>
               </div>
@@ -365,5 +404,5 @@ export default function ProductDetailPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

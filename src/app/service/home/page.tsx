@@ -1,16 +1,23 @@
-// FILE: src/app/page.tsx
-"use client";
-
+"use client"
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import {
   Baby,
   Shirt,
-  Handbag,
+  ShoppingBag,
   ShoppingCart,
   Heart,
-  MapPin,
-  Phone,
+  Star,
+  Truck,
+  RefreshCw,
+  Shield,
+  Sparkles,
+  ArrowRight,
+  Users,
+  Award,
+  Package,
+  Zap,
+  TrendingUp,
+  Gift,
 } from "lucide-react";
 
 type Product = {
@@ -24,12 +31,7 @@ type Product = {
 
 export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
-  const [featured, setFeatured] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [query, setQuery] = useState("");
-  const [newsletterEmail, setNewsletterEmail] = useState("");
-  const [newsletterSent, setNewsletterSent] = useState(false);
-
 
   useEffect(() => {
     loadProducts();
@@ -42,11 +44,8 @@ export default function HomePage() {
       const json = await res.json();
       if (res.ok && Array.isArray(json.data)) {
         setProducts(json.data);
-        setFeatured(json.data.filter((p: Product) => p.featured).slice(0, 6));
       } else if (Array.isArray(json)) {
-        // fallback if API returns array directly
-        setProducts(json as Product[]);
-        setFeatured((json as Product[]).filter((p) => p.featured).slice(0, 6));
+        setProducts(json);
       }
     } catch (err) {
       console.error("Failed to load products:", err);
@@ -55,444 +54,362 @@ export default function HomePage() {
     }
   }
 
-  const filteredProducts = products.filter((p) =>
-    `${p.name} ${p.shortDescription ?? ""}`
-      .toLowerCase()
-      .includes(query.toLowerCase())
-  );
-
-  function handleAddToCart(p: Product) {
-    // placeholder - integrate with cart logic
-    alert(`${p.name} added to cart`);
-  }
-
-  function subscribeNewsletter(e: React.FormEvent) {
-    e.preventDefault();
-    if (!newsletterEmail || !/^\S+@\S+\.\S+$/.test(newsletterEmail)) {
-      alert("Please enter a valid email address");
-      return;
-    }
-    // fake send — integrate backend if desired
-    setNewsletterSent(true);
-    setNewsletterEmail("");
-    setTimeout(() => setNewsletterSent(false), 3500);
-  }
-
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
-      {/* HERO */}
+    <div className="min-h-screen bg-gradient-to-b from-white via-green-50/30 to-white text-gray-900">
       <main>
-        <section className="bg-gradient-to-r from-green-50 via-pink-50 to-yellow-50">
-          <div className="max-w-7xl mx-auto px-4 py-16 sm:py-20 lg:py-24 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-            {/* left text */}
-            <div className="lg:col-span-6">
-              <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight text-gray-900">
-                Little styles, big smiles — clothing kids love
+        {/* HERO */}
+        <section className="relative bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 overflow-hidden">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-green-200/30 to-emerald-200/30 rounded-full blur-3xl -mr-48 -mt-48" />
+          <div className="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-tr from-teal-200/30 to-green-200/30 rounded-full blur-3xl -ml-40 -mb-40" />
+          
+          <div className="relative max-w-7xl mx-auto px-4 py-16 sm:py-20 lg:py-28 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div className="lg:col-span-6 space-y-8">
+              <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-md">
+                <Sparkles className="w-4 h-4" style={{ color: '#00a63e' }} />
+                <span className="text-sm font-semibold" style={{ color: '#00a63e', }}>New Spring Collection 2025</span>
+              </div>
+              
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-tight text-gray-900">
+                Little styles,
+                <span className="block mt-2" style={{ color: '#00a63e' }}>big smiles</span>
               </h1>
-              <p className="mt-4 text-lg text-gray-700 max-w-xl">
+              
+              <p className="text-xl text-gray-700 max-w-xl leading-relaxed">
                 Soft fabrics, playful prints and perfectly safe materials.
-                Explore stylish outfits for ages 0–10 with free returns and fast
-                delivery.
+                Explore stylish outfits for ages 0–10 with free returns and fast delivery.
               </p>
 
-              <div className="mt-6 flex gap-4">
-                <a
-                  href="/service//shop"
-                  className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-green-600 text-white font-semibold hover:bg-green-700 transition-shadow shadow"
-                >
+              <div className="flex flex-wrap gap-4">
+                <a href="/service/shop" className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-white font-bold hover:shadow-xl transition-all transform hover:scale-105" style={{ backgroundColor: '#00a63e' }}>
                   Shop Collection
+                  <ArrowRight className="w-5 h-5" />
                 </a>
-                <a
-                  href="/sale"
-                  className="inline-flex items-center gap-3 px-6 py-3 rounded-full border border-gray-200 text-gray-800 hover:bg-gray-100"
-                >
-                  View Sale
+                <a href="/service/shop" className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-white text-gray-900 font-bold hover:shadow-xl transition-all border-2 border-gray-200">
+                  Browse All
                 </a>
               </div>
 
-              <div className="mt-8 grid grid-cols-2 sm:grid-cols-3 gap-4 max-w-md">
-                <div className="flex items-center gap-3">
-                  <div className="p-3 bg-white rounded-lg shadow-sm">
-                    <ShoppingCart size={20} className="text-green-600" />
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
+                {[
+                  { icon: <Truck className="w-5 h-5" />, text: "Free Shipping", color: '#00a63e' },
+                  { icon: <RefreshCw className="w-5 h-5" />, text: "Easy Returns", color: '#ec4899' },
+                  { icon: <Shield className="w-5 h-5" />, text: "Quality Assured", color: '#8b5cf6' }
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-3 bg-white/80 backdrop-blur-sm p-4 rounded-2xl shadow-md hover:shadow-lg transition-shadow">
+                    <div className="p-2 rounded-lg" style={{ backgroundColor: item.color + '20' }}>
+                      <div style={{ color: item.color }}>{item.icon}</div>
+                    </div>
+                    <div className="text-sm font-bold text-gray-900">{item.text}</div>
                   </div>
-                  <div>
-                    <div className="text-sm font-semibold">Free Shipping</div>
-                  </div>
-                </div>
+                ))}
+              </div>
+            </div>
 
-                <div className="flex items-center gap-3">
-                  <div className="p-3 bg-white rounded-lg shadow-sm">
-                    <Heart size={20} className="text-pink-500" />
-                  </div>
-                  <div>
-                    <div className="text-sm font-semibold">Easy Returns</div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="p-3 bg-white rounded-lg shadow-sm">
-                    <BadgeIcon />
-                  </div>
-                  <div>
-                    <div className="text-sm font-semibold">Quality Assured</div>
+            <div className="lg:col-span-6 flex items-center justify-center">
+              <div className="relative w-full max-w-2xl">
+                <div className="absolute inset-0 bg-gradient-to-br from-green-400/20 to-emerald-400/20 rounded-3xl blur-2xl" />
+                <div className="relative rounded-3xl overflow-hidden shadow-2xl">
+                  <img src="/two_kids_girls.avif" alt="Kids wearing clothes" className="object-cover w-full h-96 sm:h-[500px]" />
+                  <div className="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-md rounded-2xl p-5 shadow-xl">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="text-lg font-bold text-gray-900">New Arrivals</div>
+                        <div className="text-sm text-gray-600">Spring Collection 2025</div>
+                      </div>
+                      <div className="flex gap-1">
+                        {[1, 2, 3, 4, 5].map((n) => (
+                          <Star key={n} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
+        </section>
 
-            {/* right image */}
-            <div className="lg:col-span-6 flex items-center justify-center">
-              <div className="w-full max-w-xl relative rounded-2xl overflow-hidden shadow-xl">
-                <Image
-                  src="https://plus.unsplash.com/premium_photo-1698305283092-575dcb4d3ec2?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                  alt="Kids wearing clothes"
-                  width={1200}
-                  height={900}
-                  className="object-cover w-full h-80 sm:h-96"
-                />
-                <div className="absolute bottom-4 left-4 bg-white/80 rounded-lg px-4 py-2 shadow">
-                  <div className="text-sm font-semibold">New Arrivals</div>
-                  <div className="text-xs text-gray-600">
-                    Spring Collection 2025
+        {/* TRUST BADGES */}
+        <section className="bg-white py-12 border-y border-gray-100">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              {[
+                { icon: <Users className="w-8 h-8" />, number: "100+", text: "Happy Customers" },
+                { icon: <Award className="w-8 h-8" />, number: "100%", text: "Quality Products" },
+                { icon: <Package className="w-8 h-8" />, number: "24/7", text: "Customer Support" },
+                { icon: <TrendingUp className="w-8 h-8" />, number: "4.9★", text: "Average Rating" }
+              ].map((stat, i) => (
+                <div key={i} className="text-center">
+                  <div className="flex justify-center mb-3">
+                    <div className="p-4 rounded-2xl" style={{ backgroundColor: '#00a63e20' }}>
+                      <div style={{ color: '#00a63e' }}>{stat.icon}</div>
+                    </div>
                   </div>
+                  <div className="text-3xl font-bold text-gray-900 mb-1">{stat.number}</div>
+                  <div className="text-sm text-gray-600">{stat.text}</div>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
         </section>
 
         {/* CATEGORIES */}
-        <section className="max-w-7xl mx-auto px-4 py-12">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-6">
-            Shop by category
-          </h2>
+        <section className="max-w-7xl mx-auto px-4 py-16 sm:py-20">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl sm:text-5xl font-bold mb-4">Shop by Category</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Discover our carefully curated collections designed for comfort and style
+            </p>
+          </div>
+          
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
-            <CategoryCard
-              icon={<Baby size={48} className="text-pink-500" />}
-              title="Newborn"
-            />
-            <CategoryCard
-              icon={<Shirt size={48} className="text-green-500" />}
-              title="Tops"
-            />
-            <CategoryCard
-              icon={<Handbag size={48} className="text-purple-500" />}
-              title="Accessories"
-            />
-            <CategoryCard
-              icon={<Handbag size={48} className="text-yellow-500" />}
-              title="Outerwear"
-            />
+            {[
+              { icon: <Baby size={56} className="text-pink-500" />, title: "Newborn", bg: "from-pink-50 to-pink-100", items: "200+ Items" },
+              { icon: <Shirt size={56} style={{ color: '#00a63e' }} />, title: "Tops", bg: "from-green-50 to-emerald-100", items: "350+ Items" },
+              { icon: <ShoppingBag size={56} className="text-purple-500" />, title: "Accessories", bg: "from-purple-50 to-purple-100", items: "150+ Items" },
+              { icon: <ShoppingBag size={56} className="text-yellow-500" />, title: "Outerwear", bg: "from-yellow-50 to-yellow-100", items: "180+ Items" }
+            ].map((cat, i) => (
+              <a key={i} href={`/service/shop?category=${encodeURIComponent(cat.title.toLowerCase())}`} className={`group block bg-gradient-to-br ${cat.bg} rounded-3xl shadow-lg p-8 text-center hover:shadow-2xl transition-all transform hover:scale-105`}>
+                <div className="flex items-center justify-center mb-5 transform group-hover:scale-110 transition-transform">
+                  {cat.icon}
+                </div>
+                <div className="text-xl font-bold text-gray-900 mb-1">{cat.title}</div>
+                <div className="text-sm text-gray-600">{cat.items}</div>
+              </a>
+            ))}
+          </div>
+        </section>
+
+        {/* WHY CHOOSE US */}
+        <section className="bg-gradient-to-br from-green-50 to-emerald-50 py-16 sm:py-20">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl sm:text-5xl font-bold mb-4">Why Parents Love RIBBITT</h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                We're committed to providing the best for your little ones
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[
+                { icon: <Shield className="w-12 h-12" />, title: "100% Safe Materials", desc: "All our fabrics are certified safe for sensitive skin and meet international safety standards", color: "#00a63e" },
+                { icon: <Zap className="w-12 h-12" />, title: "Fast Delivery", desc: "Get your orders delivered within 3-5 business days across India with free shipping", color: "#f59e0b" },
+                { icon: <Award className="w-12 h-12" />, title: "Premium Quality", desc: "Durable stitching and high-quality fabrics that withstand countless washes", color: "#8b5cf6" },
+                { icon: <RefreshCw className="w-12 h-12" />, title: "Easy Returns", desc: "30-day hassle-free returns and exchanges if you're not completely satisfied", color: "#ec4899" },
+                { icon: <Heart className="w-12 h-12" />, title: "Made with Love", desc: "Each piece is designed with care keeping your child's comfort in mind", color: "#ef4444" },
+                { icon: <Gift className="w-12 h-12" />, title: "Gift Wrapping", desc: "Beautiful gift packaging available for birthdays and special occasions", color: "#06b6d4" }
+              ].map((feature, i) => (
+                <div key={i} className="bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all transform hover:scale-105">
+                  <div className="flex items-center justify-center w-20 h-20 rounded-2xl mb-6 mx-auto" style={{ backgroundColor: feature.color + '20' }}>
+                    <div style={{ color: feature.color }}>{feature.icon}</div>
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3 text-center">{feature.title}</h3>
+                  <p className="text-gray-600 text-center leading-relaxed">{feature.desc}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
         {/* FEATURED COLLECTIONS */}
-        <section className="bg-gradient-to-r from-yellow-50 to-pink-50 py-12">
+        <section className="bg-gradient-to-br from-yellow-50 via-pink-50 to-purple-50 py-16 sm:py-20">
           <div className="max-w-7xl mx-auto px-4">
-            <h2 className="text-3xl font-bold mb-6">Featured Collections</h2>
+            <div className="text-center mb-12">
+              <h2 className="text-4xl sm:text-5xl font-bold mb-4">Featured Collections</h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Handpicked styles that kids love and parents trust
+              </p>
+            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-              <CollectionCard
-                title="Playful Prints"
-                subtitle="Colorful & comfortable"
-                image="https://images.unsplash.com/photo-1696751965681-613d043b5a49?q=80&w=927&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-              />
-              <CollectionCard
-                title="Soft Basics"
-                subtitle="Everyday essentials"
-                image="https://images.unsplash.com/photo-1632232963262-0e5cd712d44c?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjR8fGVjb21tZXJjZSUyMGNsb3RocyUyMGNoaWxkcmVufGVufDB8fDB8fHww"
-              />
-              <CollectionCard
-                title="Party Picks"
-                subtitle="Cute outfits for special days"
-                image="https://images.unsplash.com/photo-1614532188535-2fa164c9ea24?q=80&w=1760&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-              />
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+              {[
+                { title: "Playful Prints", subtitle: "Colorful & comfortable", img: "/girl_pose.avif", badge: "Trending" },
+                { title: "Soft Basics", subtitle: "Everyday essentials", img: "/two_cha_pr.avif", badge: "Best Seller" },
+                { title: "Party Picks", subtitle: "Cute outfits for special days", img: "/news_paper.avif", badge: "New" }
+              ].map((col, i) => (
+                <a key={i} href="/service/shop" className="group block overflow-hidden rounded-3xl shadow-xl hover:shadow-2xl transition-all transform hover:scale-105">
+                  <div className="relative h-80">
+                    <img src={col.img} alt={col.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                    <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg">
+                      <span className="text-sm font-bold" style={{ color: '#00a63e' }}>{col.badge}</span>
+                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+                    <div className="absolute inset-0 flex items-end p-6">
+                      <div className="text-white">
+                        <div className="text-2xl font-bold mb-2">{col.title}</div>
+                        <div className="text-sm text-white/90 mb-4">{col.subtitle}</div>
+                        <div className="inline-flex items-center gap-2 text-sm font-semibold">
+                          Explore Collection
+                          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              ))}
             </div>
           </div>
         </section>
 
+
         {/* TRENDING PRODUCTS */}
-        <section className="max-w-7xl mx-auto px-4 py-12">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-3xl font-bold">Trending products</h2>
-            <a
-              href="/service//shop"
-              className="text-sm text-green-600 font-medium hover:underline"
-            >
-              Browse all
+        <section className="max-w-7xl mx-auto px-4 py-16 sm:py-20">
+          <div className="flex items-center justify-between mb-12">
+            <div>
+              <h2 className="text-4xl sm:text-5xl font-bold mb-2">Trending Products</h2>
+              <p className="text-gray-600">Most loved by our customers this month</p>
+            </div>
+            <a href="/service/shop" className="hidden sm:inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold hover:shadow-lg transition-all border-2" style={{ borderColor: '#00a63e', color: '#00a63e' }}>
+              Browse All
+              <ArrowRight className="w-4 h-4" />
             </a>
           </div>
 
           {loading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[1, 2, 3].map((n) => (
-                <div
-                  key={n}
-                  className="animate-pulse bg-white rounded-lg p-6 h-72"
-                />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[1, 2, 3, 4, 5, 6].map((n) => (
+                <div key={n} className="animate-pulse bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl h-96" />
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {(filteredProducts.length
-                ? filteredProducts
-                : products.slice(0, 6)
-              ).map((p) => (
-                <ProductCard key={p._id} product={p}  />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {products.slice(0, 6).map((p) => (
+                <ProductCard key={p._id} product={p} />
               ))}
             </div>
           )}
         </section>
 
-        {/* TESTIMONIALS */}
-        <section className="py-16 bg-gray-50">
+        {/* INSTAGRAM FEED */}
+        <section className="bg-gradient-to-br from-gray-50 to-white py-16 sm:py-20">
           <div className="max-w-7xl mx-auto px-4">
-            <h2 className="text-3xl font-bold mb-8">What parents say</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-              <Testimonial
-                quote="Soft fabric, true to size and shipped quickly. My toddler loves it!"
-                author="Priya — Bangalore"
-              />
-              <Testimonial
-                quote="Adorable prints and durable stitching. Will buy again."
-                author="Rajat — Mumbai"
-              />
-              <Testimonial
-                quote="Great value for money and easy returns. Highly recommended."
-                author="Anya — Delhi"
-              />
-            </div>
-          </div>
-        </section>
-
-        {/* NEWSLETTER */}
-        <section className="max-w-3xl mx-auto px-4 py-12">
-          <div className="bg-white rounded-xl shadow p-8 text-center">
-            <h3 className="text-2xl font-bold mb-2">Join our newsletter</h3>
-            <p className="text-gray-600 mb-6">
-              Get 10% off your first order and be the first to see new arrivals.
-            </p>
-
-            <form
-              onSubmit={subscribeNewsletter}
-              className="flex flex-col sm:flex-row gap-3 justify-center"
-            >
-              <input
-                value={newsletterEmail}
-                onChange={(e) => setNewsletterEmail(e.target.value)}
-                placeholder="you@domain.com"
-                className="w-full sm:flex-1 border rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-300"
-              />
-              <button
-                type="submit"
-                className="px-6 py-3 rounded-full bg-green-600 text-white font-semibold hover:bg-green-700"
-              >
-                {newsletterSent ? "Subscribed" : "Subscribe"}
-              </button>
-            </form>
-          </div>
-        </section>
-
-        {/* FOOTER */}
-        <footer className="bg-white border-t mt-12">
-          <div className="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <div className="font-bold text-lg mb-3">Kids Fashion</div>
-              <p className="text-sm text-gray-600">
-                Cute, comfy and safe clothing for kids. Delivered with care.
+            <div className="text-center mb-12">
+              <h2 className="text-4xl sm:text-5xl font-bold mb-4">#RIBBITTKids</h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                See how parents are styling their little ones with RIBBITT
               </p>
-              <div className="flex items-center gap-3 mt-4 text-sm text-gray-700">
-                <MapPin size={16} />
-                <span>123 Fashion Street, NY</span>
-              </div>
-              <div className="flex items-center gap-3 mt-2 text-sm text-gray-700">
-                <Phone size={16} />
-                <span>+1 555 123 4567</span>
-              </div>
             </div>
 
-            <div>
-              <div className="font-semibold mb-3">Company</div>
-              <ul className="text-sm text-gray-600 space-y-2">
-                <li>
-                  <a href="/about" className="hover:underline">
-                    About Us
-                  </a>
-                </li>
-                <li>
-                  <a href="/careers" className="hover:underline">
-                    Careers
-                  </a>
-                </li>
-                <li>
-                  <a href="/press" className="hover:underline">
-                    Press
-                  </a>
-                </li>
-              </ul>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {[
+                "/kids_show.avif",
+                "/kids_hands.avif",
+                "/kids_two_girls.avif",
+                "/jump_kid.avif"
+              ].map((img, i) => (
+                <div key={i} className="relative aspect-square rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all transform hover:scale-105 group cursor-pointer">
+                  <img src={img} alt={`Instagram ${i + 1}`} className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <Heart className="w-8 h-8 text-white" />
+                  </div>
+                </div>
+              ))}
             </div>
 
-            <div>
-              <div className="font-semibold mb-3">Support</div>
-              <ul className="text-sm text-gray-600 space-y-2">
-                <li>
-                  <a href="/help" className="hover:underline">
-                    Help Center
-                  </a>
-                </li>
-                <li>
-                  <a href="/shipping" className="hover:underline">
-                    Shipping
-                  </a>
-                </li>
-                <li>
-                  <a href="/returns" className="hover:underline">
-                    Returns
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <div className="font-semibold mb-3">Legal</div>
-              <ul className="text-sm text-gray-600 space-y-2">
-                <li>
-                  <a href="/terms" className="hover:underline">
-                    Terms
-                  </a>
-                </li>
-                <li>
-                  <a href="/privacy" className="hover:underline">
-                    Privacy
-                  </a>
-                </li>
-              </ul>
+            <div className="text-center mt-8">
+              <a href="https://instagram.com" className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold hover:shadow-lg transition-all border-2" style={{ borderColor: '#00a63e', color: '#00a63e' }}>
+                Follow Us on Instagram
+                <ArrowRight className="w-4 h-4" />
+              </a>
             </div>
           </div>
+        </section>
 
-          <div className="border-t py-6">
-            <div className="max-w-7xl mx-auto px-4 text-sm text-center text-gray-600">
-              © {new Date().getFullYear()} Kids Fashion. All rights reserved.
+        {/* TESTIMONIALS */}
+        <section className="py-16 sm:py-20 bg-gradient-to-br from-green-50/50 to-emerald-50/50">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl sm:text-5xl font-bold mb-4">What Parents Say</h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Real reviews from happy families across India
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[
+                { quote: "Soft fabric, true to size and shipped quickly. My toddler loves it! The quality exceeded my expectations.", author: "Priya", location: "Bangalore" },
+                { quote: "Adorable prints and durable stitching. Will buy again. My daughter refuses to wear anything else now!", author: "Rajat", location: "Mumbai" },
+                { quote: "Great value for money and easy returns. Highly recommended. Customer service was super helpful.", author: "Anya", location: "Delhi" },
+                { quote: "Perfect for my newborn. The fabric is so gentle on sensitive skin. Love the colors!", author: "Meera", location: "Chennai" },
+                { quote: "My son looks adorable in these outfits. Great quality and fits perfectly. Will recommend to all!", author: "Karthik", location: "Hyderabad" },
+                { quote: "Fast delivery and beautiful packaging. The clothes are even better than the pictures online!", author: "Sneha", location: "Pune" }
+              ].map((test, i) => (
+                <div key={i} className="bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105">
+                  <div className="flex gap-1 mb-4">
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      <Star key={n} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                    ))}
+                  </div>
+                  <div className="text-gray-700 italic text-base leading-relaxed mb-6">
+                    "{test.quote}"
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg" style={{ backgroundColor: '#00a63e' }}>
+                      {test.author[0]}
+                    </div>
+                    <div>
+                      <div className="font-bold text-gray-900">{test.author}</div>
+                      <div className="text-sm text-gray-500">{test.location}</div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-        </footer>
+        </section>
+
       </main>
     </div>
   );
 }
 
-
-function CategoryCard({
-  icon,
-  title,
-}: {
-  icon: React.ReactNode;
-  title: string;
-}) {
-  return (
-    <a
-      href={`/service/shop?category=${encodeURIComponent(title.toLowerCase())}`}
-      className="block bg-white rounded-xl shadow p-6 text-center hover:shadow-lg transition"
-    >
-      <div className="flex items-center justify-center mb-4">{icon}</div>
-      <div className="text-lg font-semibold">{title}</div>
-    </a>
-  );
-}
-
-function CollectionCard({
-  title,
-  subtitle,
-  image,
-}: {
-  title: string;
-  subtitle: string;
-  image: string;
-}) {
-  return (
-    <a
-      href="/service/shop"
-      className="group block overflow-hidden rounded-2xl shadow-lg"
-    >
-      <div className="relative h-56">
-        <Image src={image} alt={title} fill style={{ objectFit: "cover" }} />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition" />
-      </div>
-      <div className="p-4 bg-white">
-        <div className="font-semibold">{title}</div>
-        <div className="text-sm text-gray-600 mt-1">{subtitle}</div>
-      </div>
-    </a>
-  );
-}
-
-export function ProductCard({ product }: { product: Product }) {
+function ProductCard({ product }: { product: Product }) {
   const img = product.images?.[0]?.url || "/placeholder.png";
 
-    const ADMIN_WHATSAPP_NUMBER = process.env.NEXT_APP_ADMIN_WHATSAPP_NUMBER || ""
-
-
   const handleWhatsApp = () => {
-    const message = `Hello, I'm interested in buying the product: ${product.name} (₹${product.price}). Product Link: ${window.location.href}/shop/${product._id}`;
-    const url = `https://wa.me/${ADMIN_WHATSAPP_NUMBER}?text=${encodeURIComponent(
-      message
-    )}`;
+    const message = `Hello, I'm interested in buying: ${product.name} (₹${product.price})`;
+    const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
     window.open(url, "_blank");
   };
 
   return (
-    <div className="bg-white rounded-xl shadow p-4 flex flex-col">
-      <div className="relative rounded-lg overflow-hidden h-56">
-        <Image
-          src={img}
-          alt={product.name}
-          fill
-          style={{ objectFit: "cover" }}
-        />
+    <div className="group bg-white rounded-3xl shadow-lg p-5 flex flex-col hover:shadow-2xl transition-all transform hover:scale-105">
+      <div className="relative rounded-2xl overflow-hidden h-64 bg-gray-100">
+        <img src={img} alt={product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+        <div className="absolute top-4 left-4 bg-green-600 text-white px-3 py-1 rounded-full text-xs font-bold">
+          NEW
+        </div>
+        <button className="absolute top-4 right-4 p-3 rounded-full bg-white/90 backdrop-blur-sm shadow-lg hover:bg-white transition-all">
+          <Heart size={20} className="text-gray-600 hover:text-red-500 transition-colors" />
+        </button>
       </div>
 
-      <div className="mt-4 flex-1">
-        <div className="font-semibold">{product.name}</div>
-        <div className="text-sm text-gray-600 mt-1">
-          {product.shortDescription}
+      <div className="mt-5 flex-1">
+        <div className="text-xl font-bold text-gray-900 mb-2">{product.name}</div>
+        <div className="text-sm text-gray-600 line-clamp-2">
+          {product.shortDescription || "Premium quality clothing for your little one"}
+        </div>
+        
+        <div className="flex items-center gap-1 mt-3">
+          {[1, 2, 3, 4, 5].map((n) => (
+            <Star key={n} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+          ))}
+          <span className="text-sm text-gray-500 ml-2">(4.9)</span>
         </div>
       </div>
 
-      <div className="mt-4 flex items-center gap-3">
-        <div className="text-lg font-bold">₹{product.price}</div>
-
-        {/* WhatsApp Contact Button */}
-        <button
-          onClick={handleWhatsApp}
-          className="ml-auto inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-600 text-white hover:bg-green-700"
-        >
-          Contact via WhatsApp
-        </button>
-
-        <button className="p-2 rounded-full border hover:bg-gray-50">
-          <Heart size={16} />
+      <div className="mt-5 flex items-center justify-between gap-3">
+        <div>
+          <div className="text-2xl font-bold" style={{ color: '#00a63e' }}>
+            ₹{product.price}
+          </div>
+          <div className="text-sm text-gray-500 line-through">₹{Math.round(product.price * 1.3)}</div>
+        </div>
+        <button onClick={handleWhatsApp} className="inline-flex items-center gap-2 px-5 py-3 rounded-full text-white font-semibold hover:shadow-lg transition-all" style={{ backgroundColor: '#00a63e' }}>
+          <ShoppingCart size={18} />
+          Buy Now
         </button>
       </div>
     </div>
-  );
-}
-
-function Testimonial({ quote, author }: { quote: string; author: string }) {
-  return (
-    <div className="bg-white rounded-xl p-6 shadow">
-      <div className="text-gray-700 italic">“{quote}”</div>
-      <div className="mt-4 text-sm font-semibold">{author}</div>
-    </div>
-  );
-}
-
-function BadgeIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path
-        d="M12 2l2.09 4.26L19 7.27l-3 2.92.71 5.19L12 14.77 7.29 15.38 8 10.19 5 7.27l4.91-.99L12 2z"
-        fill="#F59E0B"
-      />
-    </svg>
   );
 }

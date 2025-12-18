@@ -38,10 +38,10 @@ export function Footer() {
           <div>
             <h4 className="text-lg font-semibold text-white mb-4">Quick Links</h4>
             <ul className="space-y-3">
-              <li><Link href="/shop" className="hover:text-white transition">Shop</Link></li>
-              <li><Link href="/about" className="hover:text-white transition">About Us</Link></li>
-              <li><Link href="/contact" className="hover:text-white transition">Contact</Link></li>
-              <li><Link href="/account/orders" className="hover:text-white transition">My Orders</Link></li>
+              <li><Link href="/service/shop" className="hover:text-white transition">Shop</Link></li>
+              <li><Link href="/service/about" className="hover:text-white transition">About Us</Link></li>
+              <li><Link href="/service/contact" className="hover:text-white transition">Contact</Link></li>
+              <li><Link href="/service/" className="hover:text-white transition">Home</Link></li>
             </ul>
           </div>
 
@@ -49,16 +49,16 @@ export function Footer() {
           <div>
             <h4 className="text-lg font-semibold text-white mb-4">Customer Service</h4>
             <ul className="space-y-3">
-              <li><Link className="hover:text-white transition" href="#">Shipping Info</Link></li>
-              <li><Link className="hover:text-white transition" href="#">Returns</Link></li>
-              <li><Link className="hover:text-white transition" href="#">Size Guide</Link></li>
+              <li><Link className="hover:text-white transition" href="/service/contact">React Us</Link></li>
+              <li><Link className="hover:text-white transition" href="/service/privacy-policy">Privacy Policy</Link></li>
+              {/* <li><Link className="hover:text-white transition" href="#">Size Guide</Link></li> */}
               <li><Link className="hover:text-white transition" href="#">FAQ</Link></li>
             </ul>
           </div>
 
           {/* NEWSLETTER */}
           <div>
-            <h4 className="text-lg font-semibold text-white mb-4">Stay Updated</h4>
+            {/* <h4 className="text-lg font-semibold text-white mb-4">Stay Updated</h4>
             <p className="text-gray-400 mb-4">
               Join our newsletter for new arrivals, offers & updates.
             </p>
@@ -75,18 +75,18 @@ export function Footer() {
               >
                 Subscribe
               </button>
-            </form>
+            </form> */}
 
             {/* Contact Info */}
             <div className="mt-6 space-y-3 text-sm">
               <div className="flex items-center gap-3">
-                <Mail size={16} /> support@kidsfashion.com
+                <Mail size={16} /> ribbitttians@gmail.com
               </div>
               <div className="flex items-center gap-3">
-                <Phone size={16} /> +91 98765 43210
+                <Phone size={16} /> +91 9901992861
               </div>
               <div className="flex items-center gap-3">
-                <MapPin size={16} /> Bengaluru, India
+                <MapPin size={16} /> Udupi, India
               </div>
             </div>
           </div>

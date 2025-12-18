@@ -20,18 +20,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        {IS_UNDER_DEVELOPMENT ? (
-          <main className="min-h-screen">{children}</main>
-        ) : (
-          <>
-            <Header />
-            <main className="min-h-screen">{children}</main>
-            <Footer />
-          </>
-        )}
-      </body>
-    </html>
+    <div>
+      <Header />
+      <main className="min-h-screen">{children}</main>
+      <Footer />
+    </div>
   );
 }

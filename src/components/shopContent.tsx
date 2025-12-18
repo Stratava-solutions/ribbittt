@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import { FilterSidebar } from '../components/filterSidebar'
 import { ProductCard } from '../components/productCard'
 import { toast } from 'react-hot-toast'
+import { Sparkles, SlidersHorizontal, Package } from 'lucide-react'
 
 interface Product {
   _id: string
@@ -26,6 +27,7 @@ export function ShopContent() {
   const [products, setProducts] = useState<Product[]>([])
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
+  const [showFilters, setShowFilters] = useState(false)
   const [filters, setFilters] = useState({
     category: 'all',
     priceRange: 'all',
@@ -77,72 +79,133 @@ export function ShopContent() {
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => setSortBy(e.target.value)
 
   if (loading) return (
-    <div className="container mx-auto px-4 py-12 flex justify-center items-center min-h-[60vh]">
+    <div className="min-h-screen flex justify-center items-center bg-gradient-to-b from-white to-green-50/30">
       <div className="text-center">
-        <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-pink-500 mx-auto mb-4"></div>
-        <p className="text-gray-500 text-lg">Loading products...</p>
+        <div className="animate-spin rounded-full h-16 w-16 border-b-4 mx-auto mb-4" style={{ borderColor: '#00a63e' }}></div>
+        <p className="text-gray-600 text-lg font-medium">Loading amazing products...</p>
       </div>
     </div>
   )
 
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="min-h-screen bg-gradient-to-b from-white via-green-50/20 to-white">
+      {/* Compact Hero Banner */}
+      <div className="relative bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-green-200/30 to-emerald-200/30 rounded-full blur-3xl -mr-32 -mt-32" />
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-teal-200/30 to-green-200/30 rounded-full blur-3xl -ml-24 -mb-24" />
+        
+        <div className="relative w-full px-4 py-12 md:py-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div className="space-y-4">
+              <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-md">
+                <Sparkles className="w-4 h-4" style={{ color: '#00a63e' }} />
+                <span className="text-sm font-semibold" style={{ color: '#00a63e' }}>Discover Our Collection</span>
+              </div>
+              
+              <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900">
+                Kids Fashion
+                <span className="block mt-2" style={{ color: '#00a63e' }}>Shop</span>
+              </h1>
+              
+              <p className="text-lg text-gray-700 max-w-lg">
+                Explore playful styles and comfortable wear for ages 0-10. Filter by category, color, and size to find perfect outfits.
+              </p>
+            </div>
 
-      {/* Hero Section */}
-      <div className="relative bg-pink-50 rounded-3xl overflow-hidden mb-12 flex flex-col md:flex-row items-center justify-between p-8 md:p-16 gap-8">
-        <div className="text-center md:text-left max-w-xl">
-          <h1 className="text-5xl font-bold text-gray-900 mb-4">Kids Fashion Collection</h1>
-          <p className="text-gray-600 mb-6">
-            Explore the latest trends in kids clothing, from playful dresses to comfy everyday wear. Filter by color, size, and price to find perfect outfits.
-          </p>
-          <button className="px-6 py-3 bg-pink-500 text-white rounded-full shadow-lg hover:bg-pink-600 transition font-semibold">
-            Shop Now
-          </button>
-        </div>
-        <img src="https://images.unsplash.com/photo-1705250466297-90035b3a2b26?q=80&w=2154&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Kids Fashion" className="w-full md:w-1/2 object-cover rounded-2xl shadow-lg" />
-      </div>
-
-      <div className="flex flex-col md:flex-row gap-8">
-        {/* Sidebar */}
-        <FilterSidebar filters={filters} setFilters={setFilters} products={products} />
-
-        {/* Product Grid */}
-        <div className="flex-1">
-          <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-            <p className="text-gray-600 font-medium">
-              {filteredProducts.length} product{filteredProducts.length !== 1 ? 's' : ''} found
-            </p>
-            <select
-              className="border rounded-md px-4 py-2 shadow-sm focus:ring-2 focus:ring-pink-400 focus:border-transparent transition"
-              value={sortBy}
-              onChange={handleSortChange}
-            >
-              <option value="featured">Sort by: Featured</option>
-              <option value="price-low">Price: Low to High</option>
-              <option value="price-high">Price: High to Low</option>
-              <option value="newest">Newest</option>
-            </select>
+            <div className="relative h-64 md:h-72 rounded-2xl overflow-hidden shadow-2xl">
+              <img 
+                src="/cloth_bundle.avif" 
+                alt="Kids Fashion" 
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+            </div>
           </div>
-
-          {filteredProducts.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredProducts.map(product => (
-                <ProductCard key={product._id} product={product} hoverImages={true} showTags={true} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-20">
-              <p className="text-xl text-gray-500 mb-4">No products found matching your filters.</p>
-              <button
-                onClick={() => setFilters({ category: 'all', priceRange: 'all', color: 'all', size: 'all' })}
-                className="px-6 py-3 rounded-full bg-pink-500 text-white font-semibold hover:bg-pink-600 transition"
-              >
-                Clear Filters
-              </button>
-            </div>
-          )}
         </div>
       </div>
+
+      {/* Main Content */}
+      <div className="w-full px-4 py-8 md:py-12">
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Desktop Sidebar */}
+          <FilterSidebar 
+            filters={filters} 
+            setFilters={setFilters} 
+            products={products} 
+          />
+
+          {/* Products Section */}
+          <div className="flex-1">
+            {/* Mobile Filter Button & Sort */}
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+              <div className="flex items-center gap-4 w-full sm:w-auto">
+                <button
+                  onClick={() => setShowFilters(true)}
+                  className="lg:hidden flex items-center gap-2 px-6 py-3 rounded-full text-white font-semibold shadow-lg"
+                  style={{ backgroundColor: '#00a63e' }}
+                >
+                  <SlidersHorizontal size={20} />
+                  Filters
+                </button>
+                
+                <div className="flex items-center gap-2">
+                  <Package className="w-5 h-5" style={{ color: '#00a63e' }} />
+                  <p className="text-gray-700 font-bold">
+                    {filteredProducts.length} {filteredProducts.length === 1 ? 'Product' : 'Products'}
+                  </p>
+                </div>
+              </div>
+
+              <select
+                className="px-6 py-3 rounded-full border-2 border-gray-200 focus:border-green-500 focus:outline-none font-semibold text-gray-700 bg-white shadow-sm"
+                value={sortBy}
+                onChange={handleSortChange}
+              >
+                <option value="featured">Featured</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="newest">Newest First</option>
+              </select>
+            </div>
+
+            {/* Products Grid */}
+            {filteredProducts.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {filteredProducts.map(product => (
+                  <ProductCard key={product._id} product={product} hoverImages={true} showTags={true} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-20 bg-white rounded-3xl shadow-lg">
+                <div className="flex justify-center mb-6">
+                  <div className="p-6 bg-green-50 rounded-full">
+                    <Package size={48} style={{ color: '#00a63e' }} />
+                  </div>
+                </div>
+                <p className="text-2xl font-bold text-gray-900 mb-2">No products found</p>
+                <p className="text-gray-600 mb-6">Try adjusting your filters to see more results</p>
+                <button
+                  onClick={() => setFilters({ category: 'all', priceRange: 'all', color: 'all', size: 'all' })}
+                  className="px-8 py-3 rounded-full text-white font-bold shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
+                  style={{ backgroundColor: '#00a63e' }}
+                >
+                  Clear All Filters
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Filter Modal */}
+      <FilterSidebar 
+        filters={filters} 
+        setFilters={setFilters} 
+        products={products}
+        showFilters={showFilters}
+        setShowFilters={setShowFilters}
+        isMobile={true}
+      />
     </div>
   )
 }
